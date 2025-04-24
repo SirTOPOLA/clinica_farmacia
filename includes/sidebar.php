@@ -2,7 +2,7 @@
 session_start();
 $user = $_SESSION['usuario'] = 'Dr. Santiago Obiang'; 
 
-$rol = $_SESSION['rol'] ?? 'medico';
+$rol = $_SESSION['rol'] ?? 'administrador';
 $pagina = basename($_SERVER['PHP_SELF']);
 
 function activo($archivo) {
