@@ -56,29 +56,21 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
               </span>
             </td>
             <td>
-              <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalConfirmarAccion"
-                data-id="<?= $u['id_usuario'] ?>"
-                data-nombre="<?= $u['nombre_empleado'] ?>"
-                data-apellido="<?= $u['apellido_empleado'] ?>"
-                data-correo="<?= $u['correo'] ?>"
-                data-codigo="<?= $u['codigo_empleado'] ?>"
-                data-rol="<?= $u['nombre_rol'] ?>"
-                data-accion="<?= $u['activo'] ? 'desactivar' : 'activar' ?>">
-                <i class="bi bi-pencil"></i> Editar
+              <button class="btn btn-sm btn-warning" onclick="editarUsuario(<?= $u['id_usuario'] ?>)">
+                <i class="bi bi-pencil"></i>
               </button>
 
-              <!-- Botón de activar/desactivar con ícono -->
-              <button class="btn btn-sm <?= $u['activo'] ? 'btn-danger' : 'btn-success' ?>" data-bs-toggle="modal" data-bs-target="#modalConfirmarAccion"
-                data-id="<?= $u['id_usuario'] ?>"
-                data-nombre="<?= $u['nombre_empleado'] ?>"
-                data-apellido="<?= $u['apellido_empleado'] ?>"
-                data-correo="<?= $u['correo'] ?>"
-                data-codigo="<?= $u['codigo_empleado'] ?>"
-                data-rol="<?= $u['nombre_rol'] ?>"
-                data-accion="<?= $u['activo'] ? 'desactivar' : 'activar' ?>">
-                <i class="bi <?= $u['activo'] ? 'bi-person-dash' : 'bi-person-check' ?>"></i>
-                <?= $u['activo'] ? 'Desactivar' : 'Activar' ?>
-              </button>
+              <?php if ($u['activo']): ?>
+                <!-- Botón de desactivar -->
+                <button class="btn btn-sm btn-secondary" onclick="confirmarDesactivar(<?= $u['id_usuario'] ?>)">
+                  <i class="bi bi-person-dash"></i> Desactivar
+                </button>
+              <?php else: ?>
+                <!-- Botón de activar -->
+                <button class="btn btn-sm btn-success" onclick="confirmarActivar(<?= $u['id_usuario'] ?>)">
+                  <i class="bi bi-person-check"></i> Activar
+                </button>
+              <?php endif; ?>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -90,39 +82,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-  <!-- Modal -->
-  <div class="modal fade" id="modalConfirmarAccion" tabindex="-1" aria-labelledby="modalConfirmarAccionLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="modalConfirmarAccionLabel">
-            <i class="bi bi-person-circle"></i> Confirmar Acción
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <p><strong>¿Estás seguro de que deseas <span id="accion-texto"></span> al siguiente usuario?</strong></p>
 
-          <!-- Datos del usuario -->
-          <ul class="list-unstyled">
-            <li><strong>Nombre:</strong> <span id="nombre-usuario"></span></li>
-            <li><strong>Apellido:</strong> <span id="apellido-usuario"></span></li>
-            <li><strong>Correo:</strong> <span id="correo-usuario"></span></li>
-            <li><strong>Código de Empleado:</strong> <span id="codigo-empleado"></span></li>
-            <li><strong>Rol:</strong> <span id="rol-usuario"></span></li>
-          </ul>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-light" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Cancelar</button>
-          <form id="form-accion" method="POST">
-            <input type="hidden" name="id_usuario" id="id-usuario">
-            <input type="hidden" name="accion" id="accion">
-            <button type="submit" class="btn btn-success" id="confirmar-btn"><i class="bi bi-check-circle"></i> Confirmar</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 
@@ -130,36 +90,29 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-  // Evento para abrir el modal
-  var myModal = document.getElementById('modalConfirmarAccion');
-  myModal.addEventListener('show.bs.modal', function (event) {
-    var button = event.relatedTarget; // El botón que activó el modal
-
-    // Datos del usuario
-    var idUsuario = button.getAttribute('data-id');
-    var nombreUsuario = button.getAttribute('data-nombre');
-    var apellidoUsuario = button.getAttribute('data-apellido');
-    var correoUsuario = button.getAttribute('data-correo');
-    var codigoEmpleado = button.getAttribute('data-codigo');
-    var rolUsuario = button.getAttribute('data-rol');
-    var accion = button.getAttribute('data-accion');
+  // Función para confirmar la desactivación de un usuario
+  function confirmarDesactivar(idUsuario) {
+    // Confirmación de desactivación
+    var confirmacion = confirm("¿Estás seguro de que deseas desactivar este usuario?");
     
-    // Asignar los valores al modal
-    var accionTexto = accion === 'activar' ? 'activar' : 'desactivar';
-    document.getElementById('accion-texto').textContent = accionTexto;
-    document.getElementById('nombre-usuario').textContent = nombreUsuario;
-    document.getElementById('apellido-usuario').textContent = apellidoUsuario;
-    document.getElementById('correo-usuario').textContent = correoUsuario;
-    document.getElementById('codigo-empleado').textContent = codigoEmpleado;
-    document.getElementById('rol-usuario').textContent = rolUsuario;
-    document.getElementById('id-usuario').value = idUsuario;
-    document.getElementById('accion').value = accion;
+    if (confirmacion) {
+      // Enviar el formulario para desactivar al usuario
+      window.location.href = '../php/desactivar_usuario.php?id_usuario=' + idUsuario;
+    }
+  }
 
-    // Cambiar el texto del botón de confirmación dependiendo de la acción
-    var confirmarBtn = document.getElementById('confirmar-btn');
-    confirmarBtn.textContent = accion === 'activar' ? 'Activar Usuario' : 'Desactivar Usuario';
-  });
+  // Función para confirmar la activación de un usuario
+  function confirmarActivar(idUsuario) {
+    // Confirmación de activación
+    var confirmacion = confirm("¿Estás seguro de que deseas activar este usuario?");
+    
+    if (confirmacion) {
+      // Enviar el formulario para activar al usuario
+      window.location.href = '../php/activar_usuario.php?id_usuario=' + idUsuario;
+    }
+  }
 </script>
+
 
   </body>
 
