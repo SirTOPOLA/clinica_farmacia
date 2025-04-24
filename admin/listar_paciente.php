@@ -3,8 +3,6 @@ include_once("../includes/header.php");
 
 
 
-include '../config/conexion.php';
-session_start();
 
 // Obtener pacientes
 $stmt = $conexion->query("SELECT * FROM pacientes ORDER BY fecha_registro DESC");
