@@ -1,12 +1,8 @@
 <?php
 include_once("../includes/header.php");
-
-
-
+include_once("../includes/sidebar.php");
 include '../config/conexion.php';
 
-
-// Consulta con JOIN para traer nombre del empleado y rol
 $stmt = $conexion->query("
     SELECT u.id_usuario, u.codigo_empleado, u.correo, u.activo,
            e.nombre AS nombre_empleado, e.apellido AS apellido_empleado,
@@ -17,103 +13,91 @@ $stmt = $conexion->query("
     ORDER BY u.id_usuario DESC
 ");
 $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
 ?>
+
 <!-- Main Content -->
-<div class="main-content">
-  <div id="usuarios" class="card p-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="mb-0">Lista de Usuarios</h4>
-      <a class="btn btn-primary" href="registrar_usuario.php">
-        <i class="bi bi-person-plus-fill me-1"></i> Nuevo Usuario
-      </a>
+<div class="main-content container mt-4">
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top-4">
+            <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i> Lista de Usuarios</h5>
+            <a class="btn btn-light btn-sm" href="registrar_usuario.php">
+                <i class="bi bi-person-plus-fill me-1"></i> Nuevo Usuario
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th>#</th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($usuarios as $u): ?>
+                            <tr>
+                                <td class="text-center"><?= htmlspecialchars($u['id_usuario']) ?></td>
+                                <td class="text-center"><?= htmlspecialchars($u['codigo_empleado']) ?></td>
+                                <td><?= htmlspecialchars($u['nombre_empleado'] . ' ' . $u['apellido_empleado']) ?></td>
+                                <td><?= htmlspecialchars($u['correo']) ?></td>
+                                <td class="text-center"><span class="badge bg-info text-dark"><?= htmlspecialchars($u['nombre_rol']) ?></span></td>
+                                <td class="text-center">
+                                    <span class="badge <?= $u['activo'] ? 'bg-success' : 'bg-secondary' ?>">
+                                        <?= $u['activo'] ? 'Activo' : 'Inactivo' ?>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-warning me-1" onclick="editarUsuario(<?= $u['id_usuario'] ?>)" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+
+                                    <?php if ($u['activo']): ?>
+                                        <button class="btn btn-sm btn-outline-secondary me-1" onclick="confirmarDesactivar(<?= $u['id_usuario'] ?>)" title="Desactivar">
+                                            <i class="bi bi-person-dash"></i>
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="btn btn-sm btn-outline-success me-1" onclick="confirmarActivar(<?= $u['id_usuario'] ?>)" title="Activar">
+                                            <i class="bi bi-person-check"></i>
+                                        </button>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+
+                        <?php if (empty($usuarios)): ?>
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">No hay usuarios registrados.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <table class="table table-hover">
-      <thead class="table-light">
-        <tr>
-          <th>#</th>
-          <th>Codigo-Empleado</th>
-          <th>Nombre</th>
-          <th>Correo</th>
-          <th>Rol</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($usuarios as $u): ?>
-          <tr>
-            <td><?= htmlspecialchars($u['id_usuario']) ?></td>
-            <td><?= htmlspecialchars($u['codigo_empleado']) ?></td>
-            <td><?= htmlspecialchars($u['nombre_empleado'] . ' ' . $u['apellido_empleado']) ?></td>
-            <td><?= htmlspecialchars($u['correo']) ?></td>
-            <td><?= htmlspecialchars($u['nombre_rol']) ?></td>
-            <td>
-              <span class="badge <?= $u['activo'] ? 'bg-success' : 'bg-secondary' ?>">
-                <?= $u['activo'] ? 'Activo' : 'Inactivo' ?>
-              </span>
-            </td>
-            <td>
-              <button class="btn btn-sm btn-warning" onclick="editarUsuario(<?= $u['id_usuario'] ?>)">
-                <i class="bi bi-pencil"></i>
-              </button>
+</div>
 
-              <?php if ($u['activo']): ?>
-                <!-- Botón de desactivar -->
-                <button class="btn btn-sm btn-secondary" onclick="confirmarDesactivar(<?= $u['id_usuario'] ?>)">
-                  <i class="bi bi-person-dash"></i> Desactivar
-                </button>
-              <?php else: ?>
-                <!-- Botón de activar -->
-                <button class="btn btn-sm btn-success" onclick="confirmarActivar(<?= $u['id_usuario'] ?>)">
-                  <i class="bi bi-person-check"></i> Activar
-                </button>
-              <?php endif; ?>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-
-
-      </tbody>
-    </table>
-  </div>
-
-
-
-
-
-
-
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-  // Función para confirmar la desactivación de un usuario
-  function confirmarDesactivar(idUsuario) {
-    // Confirmación de desactivación
-    var confirmacion = confirm("¿Estás seguro de que deseas desactivar este usuario?");
-    
-    if (confirmacion) {
-      // Enviar el formulario para desactivar al usuario
-      window.location.href = '../php/desactivar_usuario.php?id_usuario=' + idUsuario;
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function confirmarDesactivar(idUsuario) {
+    if (confirm("¿Estás seguro de que deseas desactivar este usuario?")) {
+        window.location.href = '../php/desactivar_usuario.php?id_usuario=' + idUsuario;
     }
-  }
+}
 
-  // Función para confirmar la activación de un usuario
-  function confirmarActivar(idUsuario) {
-    // Confirmación de activación
-    var confirmacion = confirm("¿Estás seguro de que deseas activar este usuario?");
-    
-    if (confirmacion) {
-      // Enviar el formulario para activar al usuario
-      window.location.href = '../php/activar_usuario.php?id_usuario=' + idUsuario;
+function confirmarActivar(idUsuario) {
+    if (confirm("¿Estás seguro de que deseas activar este usuario?")) {
+        window.location.href = '../php/activar_usuario.php?id_usuario=' + idUsuario;
     }
-  }
+}
+
+function editarUsuario(idUsuario) {
+    window.location.href = 'editar_usuario.php?id_usuario=' + idUsuario;
+}
 </script>
-
-
-  </body>
-
-  </html>
