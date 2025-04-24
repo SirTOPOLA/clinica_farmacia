@@ -1,7 +1,9 @@
 <?php
-session_start();
-$user = $_SESSION['usuario'] = 'Dr. Santiago Obiang'; 
-$rol = $_SESSION['rol'] ?? 'administrador';
+
+
+$rol=$_SESSION['nombre_rol'];
+$rol = strtolower($rol);
+
 $pagina = basename($_SERVER['PHP_SELF']);
 
 function activo($archivo) {
@@ -11,8 +13,8 @@ function activo($archivo) {
 
 $menu = [
   'Clínica' => [
-    ['listar_paciente.php', 'bi bi-people', 'Pacientes', ['reseccion', 'administrador']],
-    ['listar_cita.php', 'bi bi-calendar-event', 'Citas', ['reseccion', 'medico', 'administrador']],
+    ['listar_paciente.php', 'bi bi-people', 'Pacientes', ['resepcion', 'administrador']],
+    ['listar_cita.php', 'bi bi-calendar-event', 'Citas', ['resepcion', 'medico', 'administrador']],
     ['listar_triaje.php', 'bi bi-heart-pulse', 'Triaje', ['enfermera', 'administrador']],
     ['listar_tratamiento.php', 'bi bi-clipboard2-pulse', 'Tratamiento', ['enfermera', 'administrador']],
     ['listar_pruebas.php', 'bi bi-file-earmark-medical', 'Pruebas médicas', ['medico', 'administrador']],
@@ -20,7 +22,7 @@ $menu = [
     ['listar_receta.php', 'bi bi-prescription', 'Recetas', ['medico', 'administrador']],
   ],
   'Farmacia' => [
-    ['listar_farmacia.php', 'bi bi-capsule', 'Farmacia', ['reseccion', 'administrador']],
+    ['listar_farmacia.php', 'bi bi-capsule', 'Farmacia', ['resepcion', 'administrador']],
   ],
   'Administración' => [
     ['listar_historial.php', 'bi bi-clock-history', 'Historial', ['administrador']],
@@ -63,7 +65,7 @@ $menu = [
       <?php endif; ?>
     <?php endforeach; ?>
     <li class="nav-item mt-3">
-      <a href="logout.php" class="nav-link text-white">
+      <a href="../php/cerrar_sesion.php" class="nav-link text-white">
         <i class="bi bi-box-arrow-right"></i> Salir
       </a>
     </li>

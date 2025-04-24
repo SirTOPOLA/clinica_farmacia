@@ -1,6 +1,37 @@
+<?php
+
+session_start();
+
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: login.php");
+    exit;
+}
+include '../config/conexion.php';
+// Aquí puedes mostrar el contenido que solo debe ser visible para usuarios autenticados
+$nombre_empleado=$_SESSION['nombre_empleado'];
+$id_usuario= $_SESSION['id_usuario'];
+$id_rol=$_SESSION['id_rol'];
 
 
-<<!DOCTYPE html>
+$query = "SELECT * FROM roles WHERE id_rol = :id_rol";
+$stmt = $conexion->prepare($query);
+
+// Ejecutar la consulta con el parámetro id_rol
+$stmt->execute(['id_rol' => $id_rol]);
+
+
+    $rol = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $_SESSION['nombre_rol']=$rol['nombre_rol'];
+    
+    $rol=$rol['nombre_rol'];
+
+
+?>
+
+
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
