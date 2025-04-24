@@ -1,8 +1,7 @@
 <?php
 session_start();
 $user = $_SESSION['usuario'] = 'Dr. Santiago Obiang'; 
-
-$rol = $_SESSION['rol'] ?? 'enfermera';
+$rol = $_SESSION['rol'] ?? 'administrador';
 $pagina = basename($_SERVER['PHP_SELF']);
 
 function activo($archivo) {
@@ -33,40 +32,44 @@ $menu = [
 ];
 ?>
 
-<!-- Botón hamburguesa (para móviles) -->
-<button class="toggle-btn" onclick="document.querySelector('.sidebar').classList.toggle('show')">
-  <i class="bi bi-list"></i>
-</button>
+ 
+
+<!-- SIDEBAR -->
+ 
+
+
+<div class="d-flex">
 
 <!-- Sidebar -->
 <aside class="sidebar">
+  <div class="sidebar-header">Rol: <?= ucfirst($rol) ?></div>
   <ul class="nav flex-column">
     <li class="nav-item">
       <a href="index.php" class="nav-link <?= activo('index.php') ?>">
         <i class="bi bi-house-door"></i> Dashboard
       </a>
     </li>
-
     <?php foreach ($menu as $modulo => $links): ?>
-      <?php
-        // Verificar si hay enlaces visibles para este rol
-        $enlaces_visibles = array_filter($links, fn($link) => in_array($rol, $link[3]));
-        if (count($enlaces_visibles) === 0) continue;
-      ?>
-      <li class="nav-section-title"><?= strtoupper($modulo) ?></li>
-      <?php foreach ($enlaces_visibles as [$url, $icon, $texto]): ?>
-        <li class="nav-item">
-          <a href="<?= $url ?>" class="nav-link <?= activo($url) ?>">
-            <i class="<?= $icon ?>"></i> <?= $texto ?>
-          </a>
-        </li>
-      <?php endforeach; ?>
+      <?php $enlaces_visibles = array_filter($links, fn($link) => in_array($rol, $link[3])); ?>
+      <?php if (count($enlaces_visibles) > 0): ?>
+        <li class="nav-section-title"><?= strtoupper($modulo) ?></li>
+        <?php foreach ($enlaces_visibles as [$url, $icon, $texto]): ?>
+          <li class="nav-item">
+            <a href="<?= $url ?>" class="nav-link <?= activo($url) ?>">
+              <i class="<?= $icon ?>"></i> <?= $texto ?>
+            </a>
+          </li>
+        <?php endforeach; ?>
+      <?php endif; ?>
     <?php endforeach; ?>
-
     <li class="nav-item mt-3">
-      <a href="logout.php" class="nav-link text-danger">
+      <a href="logout.php" class="nav-link text-white">
         <i class="bi bi-box-arrow-right"></i> Salir
       </a>
     </li>
   </ul>
 </aside>
+
+ 
+
+ 
