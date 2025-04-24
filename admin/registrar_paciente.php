@@ -6,11 +6,11 @@ include_once("../includes/header.php");
      <!-- Registro de Paciente -->
 <div id="registroPaciente" class="card p-4 mt-4">
   <h4 class="mb-3"><i class="bi bi-person-plus me-2"></i>Registrar Paciente</h4>
-  <form action="procesar_registro_paciente.php" method="POST">
+  <form action="../php/insertar_pacientes.php" method="POST">
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="codigo" class="form-label">Código</label>
-        <input type="text" class="form-control" name="codigo" required>
+        <input type="text" class="form-control" name="codigo" >
       </div>
       <div class="col-md-4 mb-3">
         <label for="nombre" class="form-label">Nombre</label>

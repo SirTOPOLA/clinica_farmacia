@@ -170,6 +170,64 @@ $accesos = [
       color: #721c24;
       border: 1px solid #f5c6cb;
     }
+
+
+
+
+    /* Estilo para el Modal */
+.modal-content {
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Títulos e íconos */
+.modal-header {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #ddd;
+}
+
+.modal-footer .btn {
+  font-size: 1rem;
+}
+
+/* Botones con íconos */
+.btn-light {
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+/* Íconos */
+.bi {
+  margin-right: 8px;
+}
+
+
+
+
   </style>
 </head>
 
