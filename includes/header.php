@@ -67,7 +67,7 @@ if ($id_usuario > 0) {
           <i class="bi bi-hospital-fill me-2"></i> Clínica y Farmacia
         </span>
         <div class="ms-auto d-flex align-items-center gap-3 text-dark">
-          <span class="fw-semibold"><i class="bi bi-person-circle me-1"></i><?= $_SESSION['usuario'] ?? 'Usuario' ?></span>
+          <span class="fw-semibold"><i class="bi bi-person-circle me-1"></i><?= $nombre_empleado ?? 'Usuario' ?></span>
           <span class="badge bg-light text-dark text-capitalize"><i class="bi bi-shield-lock-fill me-1"></i><?= $rol ?></span>
         </div>
       </nav>
