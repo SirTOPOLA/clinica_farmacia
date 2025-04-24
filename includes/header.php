@@ -78,6 +78,23 @@
       border-radius: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
+
+
+
+    
+.alert {
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.error   { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+
   </style>
 </head>
 <body>

@@ -7,11 +7,11 @@ include_once("../includes/header.php");
     <div id="registroEmpleado" class="card p-4 mt-4">
         <h4 class="mb-3"><i class="bi bi-person-plus-fill me-2"></i>Registrar Nuevo Empleado</h4>
 
-        <form action="procesar_empleado.php" method="POST">
+        <form action="../php/insertar_empleados.php" method="POST">
             <div class="row g-3">
                 <div class="col-md-4">
                     <label for="codigo_empleado" class="form-label">Código de Empleado</label>
-                    <input type="text" class="form-control" id="codigo_empleado" name="codigo_empleado" required>
+                    <input type="text" class="form-control" id="codigo_empleado" name="codigo_empleado">
                 </div>
                 <div class="col-md-4">
                     <label for="nombre" class="form-label">Nombre</label>
@@ -28,7 +28,7 @@ include_once("../includes/header.php");
                 </div>
                 <div class="col-md-6">
                     <label for="telefono" class="form-label">Teléfono</label>
-                    <input type="text" class="form-control" id="telefono" name="telefono">
+                    <input type="tel" class="form-control" id="telefono" name="telefono">
                 </div>
 
                 <div class="col-md-8">
@@ -58,6 +58,13 @@ include_once("../includes/header.php");
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+setTimeout(() => {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => alert.remove());
+}, 5000);
+</script>
 </body>
 
 </html>
