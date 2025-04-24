@@ -103,37 +103,22 @@
   <aside class="sidebar">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a href="#dashboard" class="nav-link active">
+        <a href="index.php" class="nav-link active">
           <i class="bi bi-house-door"></i> Dashboard
         </a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-hospital"></i> Clínica
-        </a>
-        <ul class="dropdown-menu bg-light">
-          <li><a class="dropdown-item" href="#pacientes"><i class="bi bi-person"></i> Pacientes</a></li>
-          <li><a class="dropdown-item" href="#citas"><i class="bi bi-calendar-check"></i> Citas</a></li>
-          <li><a class="dropdown-item" href="#medicos"><i class="bi bi-person-badge"></i> Médicos</a></li>
-          <li><a class="dropdown-item" href="#historiales"><i class="bi bi-journal-medical"></i> Historial</a></li>
-          <li><a class="dropdown-item" href="#servicios"><i class="bi bi-cogs"></i> Servicios</a></li>
-          <li><a class="dropdown-item" href="#facturacion"><i class="bi bi-file-earmark"></i> Facturación</a></li>
-          <li><a class="dropdown-item" href="#reportes"><i class="bi bi-bar-chart-line"></i> Reportes</a></li>
-          <li><a class="dropdown-item" href="#aseguradoras"><i class="bi bi-shield-lock"></i> Aseguradoras</a></li>
-        </ul>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-          <i class="bi bi-shop"></i> Farmacia
-        </a>
-        <ul class="dropdown-menu bg-light">
-          <li><a class="dropdown-item" href="#productos"><i class="bi bi-box"></i> Productos</a></li>
-          <li><a class="dropdown-item" href="#proveedores"><i class="bi bi-person-lines-fill"></i> Proveedores</a></li>
-          <li><a class="dropdown-item" href="#ventas"><i class="bi bi-cash"></i> Ventas</a></li>
-          <li><a class="dropdown-item" href="#stock"><i class="bi bi-journal-check"></i> Stock</a></li>
-          <li><a class="dropdown-item" href="#reportesFarmacia"><i class="bi bi-file-earmark"></i> Reportes</a></li>
-        </ul>
-      </li>
+       
+     
+      <li class="nav-item"><a href="listar_log.php" class="nav-link"><i class="bi bi-person-circle"></i> log</a></li>
+      <li class="nav-item"><a href="listar_pruebas.php" class="nav-link"><i class="bi bi-person-circle"></i> pruebas</a></li>
+      <li class="nav-item"><a href="listar_triaje.php" class="nav-link"><i class="bi bi-person-circle"></i> triaje</a></li>
+      <li class="nav-item"><a href="listar_notificaciones.php" class="nav-link"><i class="bi bi-person-circle"></i> notificaciones</a></li>
+      <li class="nav-item"><a href="listar_farmacia.php" class="nav-link"><i class="bi bi-person-circle"></i> farmacia</a></li>
+      <li class="nav-item"><a href="listar_laboratorio.php" class="nav-link"><i class="bi bi-person-circle"></i> laboratorio</a></li>
+      <li class="nav-item"><a href="listar_tratamiento.php" class="nav-link"><i class="bi bi-person-circle"></i> tratamiento</a></li>
+      <li class="nav-item"><a href="listar_receta.php" class="nav-link"><i class="bi bi-person-circle"></i> receta</a></li>
+      <li class="nav-item"><a href="listar_historial.php" class="nav-link"><i class="bi bi-person-circle"></i> Historial</a></li>
+      <li class="nav-item"><a href="listar_cita.php" class="nav-link"><i class="bi bi-person-circle"></i> Citas</a></li>
       <li class="nav-item"><a href="listar_paciente.php" class="nav-link"><i class="bi bi-person-circle"></i> Pacientes</a></li>
       <li class="nav-item"><a href="listar_empleado.php" class="nav-link"><i class="bi bi-person-circle"></i> Empleados</a></li>
       <li class="nav-item"><a href="listar_usuario.php" class="nav-link"><i class="bi bi-person-circle"></i> Usuarios</a></li>
