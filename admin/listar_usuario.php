@@ -6,9 +6,9 @@ include_once("../includes/header.php");
   <div id="usuarios" class="card p-4">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Lista de Usuarios</h4>
-        <button class="btn btn-primary" href="registrar_usuario.php">
+        <a class="btn btn-primary" href="registrar_usuario.php">
           <i class="bi bi-person-plus-fill me-1"></i> Nuevo Usuario
-        </button>
+        </a>
       </div>
       <table class="table table-hover">
         <thead class="table-light">
