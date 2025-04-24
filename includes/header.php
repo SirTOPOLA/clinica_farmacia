@@ -22,11 +22,3 @@
       ?>
    
 
-  <!-- Navbar -->
-  <nav class="navbar">
-  <span class="navbar-brand mb-0 h1 text-white">Clínica y Farmacia</span>
-  <div class="ms-auto text-white d-flex align-items-center gap-3">
-    <span class="fw-bold"><?= $_SESSION['usuario'] ?? 'Usuario' ?></span>
-    <span class="badge bg-light text-dark text-capitalize"><?= $_SESSION['rol'] ?? 'Sin rol' ?></span>
-  </div>
-</nav>
