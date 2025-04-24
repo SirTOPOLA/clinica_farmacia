@@ -7,7 +7,7 @@ include_once("../includes/header.php");
 <div id="registroUsuario" class="card p-4 mt-4">
   <h4 class="mb-3"><i class="bi bi-person-plus-fill me-2"></i>Registrar Nuevo Usuario</h4>
   
-  <form action="procesar_registro_usuario.php" method="POST">
+  <form action="../php/insertar_usuarios.php" method="POST">
     <!-- Código de Empleado -->
     <div class="mb-3">
       <label for="codigo_empleado" class="form-label">Código de Empleado</label>

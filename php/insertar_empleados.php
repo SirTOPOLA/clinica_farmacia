@@ -1,5 +1,5 @@
 <?php
-session_start(); // Para usar sesiones
+
 include '../config/conexion.php';
 
 // Sanitizar entradas
