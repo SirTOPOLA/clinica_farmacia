@@ -10,7 +10,7 @@ include_once("../includes/header.php");
 <div id="pacientes" class="card p-4 mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Lista de Pacientes</h4>
-    <a href="#registroPaciente" class="btn btn-primary">
+    <a href="registrar_Paciente.php" class="btn btn-primary">
       <i class="bi bi-person-plus-fill me-1"></i> Nuevo Paciente
     </a>
   </div>
