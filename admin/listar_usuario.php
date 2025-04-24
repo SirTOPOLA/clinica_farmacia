@@ -4,7 +4,7 @@ include_once("../includes/header.php");
 
 
 include '../config/conexion.php';
-session_start();
+
 
 // Consulta con JOIN para traer nombre del empleado y rol
 $stmt = $conexion->query("
