@@ -117,6 +117,7 @@
           <li><a class="dropdown-item" href="#reportesFarmacia"><i class="bi bi-file-earmark"></i> Reportes</a></li>
         </ul>
       </li>
+      <li class="nav-item"><a href="listar_paciente.php" class="nav-link"><i class="bi bi-person-circle"></i> Pacientes</a></li>
       <li class="nav-item"><a href="listar_empleado.php" class="nav-link"><i class="bi bi-person-circle"></i> Empleados</a></li>
       <li class="nav-item"><a href="listar_usuario.php" class="nav-link"><i class="bi bi-person-circle"></i> Usuarios</a></li>
       <li class="nav-item"><a href="#configuracion" class="nav-link"><i class="bi bi-gear"></i> Configuración</a></li>
