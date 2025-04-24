@@ -27,8 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['nombre_empleado'] = $usuario['nombre_empleado'];
                 $_SESSION['id_rol'] = $usuario['id_rol'];
                 $_SESSION['correo'] = $usuario['correo'];
+                
+                //consegir el nombre del rol al que perteneces
+
 
                 // Redirigir al usuario a la página de inicio (o donde lo desees)
+
                 header("Location: ../admin/index.php");
                 exit;
             } else {

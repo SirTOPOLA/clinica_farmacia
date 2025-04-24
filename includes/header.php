@@ -1,34 +1,32 @@
 <?php
 
 session_start();
+include '../config/conexion.php'; // Asegúrate de que esta ruta es correcta y que $conexion es una instancia PDO
 
-// Verificar si el usuario está autenticado
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location: login.php");
-    exit;
+$id_usuario = $_SESSION['id_usuario'] ?? 0;
+
+$nombre_empleado = "Desconocido";
+$rol = "sin rol";
+
+if ($id_usuario > 0) {
+    $sql = "SELECT CONCAT(e.nombre, ' ', e.apellido) AS nombre_empleado, r.nombre_rol
+            FROM usuarios u
+            JOIN empleados e ON u.codigo_empleado = e.codigo_empleado
+            JOIN roles r ON u.id_rol = r.id_rol
+            WHERE u.id_usuario = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([$id_usuario]);
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        $nombre_empleado = $row['nombre_empleado'];
+        $rol = strtolower($row['nombre_rol']);
+    }
 }
-include '../config/conexion.php';
-// Aquí puedes mostrar el contenido que solo debe ser visible para usuarios autenticados
-$nombre_empleado=$_SESSION['nombre_empleado'];
-$id_usuario= $_SESSION['id_usuario'];
-$id_rol=$_SESSION['id_rol'];
-
-
-$query = "SELECT * FROM roles WHERE id_rol = :id_rol";
-$stmt = $conexion->prepare($query);
-
-// Ejecutar la consulta con el parámetro id_rol
-$stmt->execute(['id_rol' => $id_rol]);
-
-
-    $rol = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $_SESSION['nombre_rol']=$rol['nombre_rol'];
-    
-    $rol=$rol['nombre_rol'];
-
-
 ?>
+
 
 
 <!DOCTYPE html>
