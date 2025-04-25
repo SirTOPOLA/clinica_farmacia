@@ -1,6 +1,4 @@
 <?php
-
- 
 // Variables por defecto
 $nombre_empleado = "Usuario";
 $rol = "administrador"; // Rol por defecto
@@ -17,10 +15,8 @@ if ($id_usuario > 0) {
 
     $stmt = $conexion->prepare($sql);
     $stmt->execute([$id_usuario]);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
 
-    if ($fila = $resultado->fetch_assoc()) {
+    if ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $nombre_empleado = $fila['nombre_empleado'];
         $rol = strtolower($fila['rol']);
     }
@@ -30,33 +26,34 @@ if ($id_usuario > 0) {
 $pagina = basename($_SERVER['PHP_SELF']);
 
 function activo($archivo) {
-  global $pagina;
-  return $pagina === $archivo ? 'active' : '';
+    global $pagina;
+    return $pagina === $archivo ? 'active' : '';
 }
 
-// Menú definido con permisos por rol
+// Menú con iconos e ítems según permisos por rol
 $menu = [
-  'Clínica' => [
-    ['listar_paciente.php', 'bi bi-people', 'Pacientes', ['recepcion', 'administrador']],
-    ['listar_cita.php', 'bi bi-calendar-event', 'Citas', ['recepcion', 'medico', 'administrador']],
-    ['listar_triaje.php', 'bi bi-heart-pulse', 'Triaje', ['enfermeria', 'administrador']],
-    ['listar_tratamiento.php', 'bi bi-clipboard2-pulse', 'Tratamiento', ['enfermeria', 'administrador']],
-    ['listar_pruebas.php', 'bi bi-file-earmark-medical', 'Pruebas médicas', ['medico', 'administrador']],
-    ['listar_laboratorio.php', 'bi bi-beaker', 'Laboratorio', ['laboratorio', 'medico', 'administrador']],
-    ['listar_receta.php', 'bi bi-prescription', 'Recetas', ['medico', 'administrador']],
-  ],
-  'Farmacia' => [
-    ['listar_farmacia.php', 'bi bi-capsule', 'Farmacia', ['recepcion', 'administrador']],
-  ],
-  'Administración' => [
-    ['listar_historial.php', 'bi bi-clock-history', 'Historial', ['administrador']],
-    ['listar_empleado.php', 'bi bi-person-badge', 'Empleados', ['administrador']],
-    ['listar_usuario.php', 'bi bi-person-gear', 'Usuarios', ['administrador']],
-    ['listar_notificaciones.php', 'bi bi-bell', 'Notificaciones', ['administrador']],
-    ['#configuracion', 'bi bi-gear', 'Configuración', ['administrador']],
-  ]
+    'Clínica' => [
+        ['listar_paciente.php', 'bi bi-people', 'Pacientes', ['recepcion', 'administrador']],
+        ['listar_cita.php', 'bi bi-calendar-event', 'Citas', ['recepcion', 'medico', 'administrador']],
+        ['listar_triaje.php', 'bi bi-heart-pulse', 'Triaje', ['enfermeria', 'administrador']],
+        ['listar_tratamiento.php', 'bi bi-clipboard2-pulse', 'Tratamiento', ['enfermeria', 'administrador']],
+        ['listar_pruebas.php', 'bi bi-file-earmark-medical', 'Pruebas médicas', ['medico', 'administrador']],
+        ['listar_laboratorio.php', 'bi bi-beaker', 'Laboratorio', ['laboratorio', 'medico', 'administrador']],
+        ['listar_receta.php', 'bi bi-prescription', 'Recetas', ['medico', 'administrador']],
+    ],
+    'Farmacia' => [
+        ['listar_farmacia.php', 'bi bi-capsule', 'Farmacia', ['recepcion', 'administrador']],
+    ],
+    'Administración' => [
+        ['listar_historial.php', 'bi bi-clock-history', 'Historial', ['administrador']],
+        ['listar_empleado.php', 'bi bi-person-badge', 'Empleados', ['administrador']],
+        ['listar_usuario.php', 'bi bi-person-gear', 'Usuarios', ['administrador']],
+        ['listar_notificaciones.php', 'bi bi-bell', 'Notificaciones', ['administrador']],
+        ['#configuracion', 'bi bi-gear', 'Configuración', ['administrador']],
+    ]
 ];
 ?>
+
 
 <!-- SIDEBAR -->
  
