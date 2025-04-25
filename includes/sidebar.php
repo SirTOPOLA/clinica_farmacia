@@ -67,11 +67,13 @@ $menu = [
 ?>
 
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú lateral" >
+
+
   <div class="sidebar-fade top"></div>
 
   <!-- Encabezado del sidebar con el nombre y rol del usuario -->
-  <div class="sidebar-header">
+  <div class="sidebar-header border-bottom">
     <strong><?= htmlspecialchars($nombre_empleado) ?></strong><br>
     <small>Rol: <?= ucfirst(htmlspecialchars($rol)) ?></small>
   </div>
@@ -86,11 +88,11 @@ $menu = [
 
     <?php foreach ($menu as $modulo => $links): ?>
       <?php
-        // Filtrar solo los enlaces que el rol actual puede ver
+        // Filtrar solo los enlaces visibles para el rol
         $enlaces_visibles = array_filter($links, fn($link) => in_array($rol, $link[3]));
       ?>
       <?php if (!empty($enlaces_visibles)): ?>
-        <li class="nav-section-title"><?= strtoupper(htmlspecialchars($modulo)) ?></li>
+        <li class="nav-section-title border-top pt-3"><?= strtoupper(htmlspecialchars($modulo)) ?></li>
         <?php foreach ($enlaces_visibles as [$url, $icon, $texto]): ?>
           <li class="nav-item">
             <a href="<?= htmlspecialchars($url) ?>" class="nav-link <?= activo($url) ?>">
@@ -102,12 +104,14 @@ $menu = [
     <?php endforeach; ?>
 
     <!-- Botón de salir -->
-    <li class="nav-item mt-3">
-      <a href="../php/cerrar_sesion.php" class="nav-link text-white">
+    <li class="nav-item mt-4 border-top pt-3">
+      <a href="../php/cerrar_sesion.php" class="nav-link nav-link-exit">
         <i class="bi bi-box-arrow-right"></i> Salir
       </a>
     </li>
   </ul>
 
-  <div class="sidebar-fade botom"></div>
+  <div class="sidebar-fade bottom"></div>
 </aside>
+<!-- aplica sombra oscura en movil cuando el sidebar esta abierto -->
+<div class="sidebar-overlay"></div>

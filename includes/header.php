@@ -91,35 +91,35 @@ if ($id_usuario > 0) {
   }
   </script>
 </head>
+
+
 <header class="header fixed-top w-100 shadow-sm">
   <nav class="navbar navbar-expand-lg bg-primary px-3 w-100">
-    <div class="container-fluid align-items-center">
-      <div class="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-center">
-        
-        <!-- Lado izquierdo -->
-        <div class="d-flex align-items-center gap-3">
-          <button class="toggle-btn btn btn-outline-light d-lg-none" aria-label="Menú">
-            <i class="bi bi-list"></i>
-          </button>
-          <a href="#" class="navbar-brand d-flex align-items-center gap-2 text-white text-decoration-none mb-2 mb-lg-0">
-            <i class="bi bi-hospital-fill fs-4"></i>
-            <span class="fw-bold fs-5">Clínica y Farmacia</span>
-          </a>
-        </div>
+    <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap gap-3">
 
-        <!-- Lado derecho -->
-        <div class="d-flex align-items-center gap-3 text-white flex-wrap">
-          <span class="fw-semibold d-flex align-items-center">
-            <i class="bi bi-person-circle me-2 fs-5"></i>
-            <?= htmlspecialchars($nombre_empleado ?? 'Usuario', ENT_QUOTES, 'UTF-8') ?>
-          </span>
-          <span class="badge bg-light text-primary text-capitalize d-flex align-items-center px-3 py-2 rounded-pill">
-            <i class="bi bi-shield-lock-fill me-2"></i><?= htmlspecialchars($rol ?? 'Invitado', ENT_QUOTES, 'UTF-8') ?>
-          </span>
-        </div>
-
+      <!-- Lado izquierdo -->
+      <div class="d-flex align-items-center gap-3 flex-nowrap overflow-hidden flex-grow-1">
+        <button class="toggle-btn btn btn-outline-light d-lg-none" aria-label="Mostrar menú lateral">
+          <i class="bi bi-list fs-4"></i>
+        </button>
+        <a href="index.php" class="navbar-brand d-flex align-items-center gap-2 text-white text-decoration-none flex-shrink-0">
+          <i class="bi bi-hospital-fill fs-4"></i>
+          <span class="fw-bold fs-5 text-truncate" style="max-width: 100%;">Clínica y Farmacia</span>
+        </a>
       </div>
+
+      <!-- Lado derecho -->
+      <div class="d-flex align-items-center gap-3 text-white flex-nowrap overflow-hidden flex-grow-1 justify-content-end">
+        <span class="fw-semibold d-flex align-items-center text-nowrap text-truncate" style="max-width: 160px;" title="<?= htmlspecialchars($nombre_empleado ?? 'Usuario', ENT_QUOTES, 'UTF-8') ?>">
+          <i class="bi bi-person-circle me-2 fs-5"></i>
+          <?= htmlspecialchars($nombre_empleado ?? 'Usuario', ENT_QUOTES, 'UTF-8') ?>
+        </span>
+        <span class="badge bg-light text-primary text-capitalize d-flex align-items-center px-3 py-2 rounded-pill text-nowrap text-truncate" style="max-width: 140px;" title="<?= htmlspecialchars($rol ?? 'Invitado', ENT_QUOTES, 'UTF-8') ?>">
+          <i class="bi bi-shield-lock-fill me-2"></i>
+          <?= htmlspecialchars($rol ?? 'Invitado', ENT_QUOTES, 'UTF-8') ?>
+        </span>
+      </div>
+
     </div>
   </nav>
 </header>
-
