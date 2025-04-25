@@ -59,8 +59,10 @@ $menu = [
 ?>
 
 <!-- SIDEBAR -->
-<div class="d-flex">
+ 
   <aside class="sidebar">
+    <div class="sidebar-fade top"></div>
+ 
     <div class="sidebar-header">
       <strong><?= htmlspecialchars($nombre_empleado) ?></strong><br>
       <small>Rol: <?= ucfirst($rol) ?></small>
@@ -90,4 +92,6 @@ $menu = [
         </a>
       </li>
     </ul>
+ 
+    <div class="sidebar-fade botom"></div>
   </aside>

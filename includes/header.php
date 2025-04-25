@@ -104,20 +104,33 @@ if ($id_usuario > 0) {
     </nav>
 </header>
  -->
- 
-<header class="header">
-    <nav class="navbar navbar-expand-lg bg-primary shadow-sm px-4 d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <button class="btn btn-light d-lg-none me-2" id="toggleSidebar">
-                <i class="bi bi-list"></i>
-            </button>
-            <span class="navbar-brand mb-0 h1 text-white d-flex align-items-center">
-                <i class="bi bi-hospital-fill me-2"></i> Clínica y Farmacia
-            </span>
-        </div>
-        <div class="ms-auto d-flex align-items-center gap-3 text-white">
-            <span class="fw-semibold"><i class="bi bi-person-circle me-1"></i><?= $nombre_empleado ?? 'Usuario' ?></span>
-            <span class="badge bg-light text-primary text-capitalize"><i class="bi bi-shield-lock-fill me-1"></i><?= $rol ?></span>
-        </div>
-    </nav>
+
+ <header class="header fixed-top shadow-sm w-100">
+  <nav class="navbar navbar-expand-lg bg-primary px-4 w-100">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <!-- Lado izquierdo -->
+      <div class="d-flex align-items-center gap-3">
+        <button class="toggle-btn btn btn-primary d-lg-none" onclick="toggleSidebar()">
+          <i class="bi bi-list"></i>
+        </button>
+        <span class="navbar-brand mb-0 h1 text-white d-flex align-items-center gap-2">
+          <i class="bi bi-hospital-fill fs-4"></i>
+          <span class="fw-bold fs-5">Clínica y Farmacia</span>
+        </span>
+      </div>
+
+      <!-- Lado derecho -->
+      <div class="d-flex align-items-center gap-3 text-white">
+        <span class="fw-semibold d-flex align-items-center">
+          <i class="bi bi-person-circle me-2 fs-5"></i>
+          <?= $nombre_empleado ?? 'Usuario' ?>
+        </span>
+        <span class="badge bg-light text-primary text-capitalize d-flex align-items-center px-3 py-2 rounded-pill">
+          <i class="bi bi-shield-lock-fill me-2"></i><?= $rol ?>
+        </span>
+      </div>
+    </div>
+  </nav>
 </header>
+
+ 
