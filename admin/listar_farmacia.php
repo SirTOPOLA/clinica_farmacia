@@ -1,5 +1,6 @@
 <?php 
 include_once("../includes/header.php");
+include_once("../includes/sidebar.php");
 ?>
   <!-- Main Content -->
   <div class="main-content">

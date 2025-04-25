@@ -1,9 +1,6 @@
 <?php
 
-// Asegúrate de haber llamado session_start() antes
  
-include '../config/conexion.php'; // Asegúrate de que $conn es una instancia de PDO
-
 // Variables por defecto
 $nombre_empleado = "Usuario";
 $rol = "administrador"; // Rol por defecto
@@ -18,17 +15,16 @@ if ($id_usuario > 0) {
             JOIN roles r ON u.id_rol = r.id_rol
             WHERE u.id_usuario = ? LIMIT 1";
 
-    $stmt = $conexion->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->execute([$id_usuario]);
-    $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
-    if ($fila) {
+    if ($fila = $resultado->fetch_assoc()) {
         $nombre_empleado = $fila['nombre_empleado'];
-        $rol = $fila['rol'];
+        $rol = strtolower($fila['rol']);
     }
 }
- 
-
 
 // Determinar la página actual para resaltar la activa
 $pagina = basename($_SERVER['PHP_SELF']);

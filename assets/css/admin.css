@@ -1,8 +1,12 @@
+/* Base */
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f1f5f9;
+  margin: 0;
+  padding: 0;
 }
 
+/* Sidebar */
 .sidebar {
   background: linear-gradient(180deg, #1e3a8a, #1e40af);
   width: 260px;
@@ -47,14 +51,53 @@ body {
   padding-left: 26px;
 }
 
-.main-content {
-  margin-left: 260px;
-  padding: 2rem;
-  background-color: #f1f5f9;
-  min-height: 100vh;
-  transition: margin-left 0.3s ease;
+/* Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 260px;
+  right: 0;
+  height: 60px;
+  background-color: #1e3a8a;
+  z-index: 1040;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
 }
 
+/* Main content */
+.main-content {
+  margin-left: 260px;
+  padding: 100px 2rem 2rem 2rem; /* Compensa altura del header */
+  min-height: 100vh;
+  background-color: #f1f5f9;
+  transition: margin-left 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Wrapper interno */
+.content-wrapper {
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Tarjetas animadas */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón toggle sidebar */
 .toggle-btn {
   background-color: #1e40af;
   border: none;
@@ -65,6 +108,7 @@ body {
   display: none;
 }
 
+/* Estilos responsive */
 @media (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);
@@ -74,20 +118,22 @@ body {
     transform: translateX(0);
   }
 
+  .header {
+    left: 0;
+  }
+
   .main-content {
     margin-left: 0;
+    padding-top: 80px;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .toggle-btn {
     display: inline-block;
   }
-}
 
-.card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  .content-wrapper {
+    padding: 1rem;
+  }
 }

@@ -1,6 +1,7 @@
 <?php 
 include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
+include_once("../config/conexion.php"); // Asegúrate de tener esta conexión activa
 ?>
 
 <!-- Main Content -->
@@ -12,38 +13,52 @@ include_once("../includes/sidebar.php");
 
     <div class="card-body">
       <form action="guardar_cita.php" method="POST" class="needs-validation" novalidate>
+
+        <!-- Paciente -->
         <div class="mb-3">
           <label for="paciente" class="form-label">Paciente</label>
           <select class="form-select" id="paciente" name="id_paciente" required>
             <option selected disabled value="">Seleccione un paciente</option>
-            <option value="1">Juan Pérez</option>
-            <option value="2">María García</option>
+            <?php
+            $pacientes = mysqli_query($conn, "SELECT id_paciente, CONCAT(nombre, ' ', apellido) AS nombre_completo FROM pacientes ORDER BY nombre");
+            while ($p = mysqli_fetch_assoc($pacientes)) {
+              echo "<option value='{$p['id_paciente']}'>{$p['nombre_completo']}</option>";
+            }
+            ?>
           </select>
           <div class="invalid-feedback">Seleccione un paciente.</div>
         </div>
 
+        <!-- Empleado -->
         <div class="mb-3">
           <label for="empleado" class="form-label">Empleado (Doctor)</label>
           <select class="form-select" id="empleado" name="id_empleado" required>
             <option selected disabled value="">Seleccione un médico</option>
-            <option value="1">Dra. Ana López</option>
-            <option value="2">Dr. Carlos Ruiz</option>
+            <?php
+            $empleados = mysqli_query($conn, "SELECT id_empleado, nombre FROM empleados WHERE rol = 'doctor' ORDER BY nombre");
+            while ($e = mysqli_fetch_assoc($empleados)) {
+              echo "<option value='{$e['id_empleado']}'>{$e['nombre']}</option>";
+            }
+            ?>
           </select>
           <div class="invalid-feedback">Seleccione un médico responsable.</div>
         </div>
 
+        <!-- Fecha -->
         <div class="mb-3">
           <label for="fecha_cita" class="form-label">Fecha de la Cita</label>
           <input type="date" class="form-control" id="fecha_cita" name="fecha_cita" required>
           <div class="invalid-feedback">Ingrese una fecha válida.</div>
         </div>
 
+        <!-- Hora -->
         <div class="mb-3">
           <label for="hora_cita" class="form-label">Hora de la Cita</label>
           <input type="time" class="form-control" id="hora_cita" name="hora_cita" required>
           <div class="invalid-feedback">Ingrese una hora válida.</div>
         </div>
 
+        <!-- Estado -->
         <div class="mb-3">
           <label for="estado" class="form-label">Estado</label>
           <select class="form-select" id="estado" name="estado" required>
@@ -55,6 +70,7 @@ include_once("../includes/sidebar.php");
           <div class="invalid-feedback">Seleccione el estado de la cita.</div>
         </div>
 
+        <!-- Botones -->
         <div class="d-flex justify-content-between">
           <a href="listar_cita.php" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Volver
