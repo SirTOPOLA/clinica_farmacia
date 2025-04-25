@@ -1,41 +1,41 @@
 <?php
 session_start();
-include '../config/conexion.php';
+require_once '../config/conexion.php';
 
-// Sanitizar entradas
-$codigo_empleado = htmlspecialchars(trim($_POST['codigo_empleado']));
-$correo = filter_var(trim($_POST['correo']), FILTER_SANITIZE_EMAIL);
-$contrasena = trim($_POST['contrasena']);
-$id_rol = intval($_POST['id_rol']);
+// Sanitizar y validar entradas
+$codigo_empleado = htmlspecialchars(trim($_POST['codigo_empleado'] ?? ''));
+$correo = filter_var(trim($_POST['correo'] ?? ''), FILTER_SANITIZE_EMAIL);
+$contrasena = trim($_POST['contrasena'] ?? '');
+$id_rol = intval($_POST['id_rol'] ?? 0);
 
-// Validaciones
+// Inicializar arreglo de errores
 $errores = [];
 
+// Validaciones
 if (empty($codigo_empleado)) {
     $errores[] = "El código de empleado es obligatorio.";
 } elseif (!preg_match('/^[A-Za-z0-9]+$/', $codigo_empleado)) {
-    $errores[] = "El código de empleado solo puede contener letras y números.";
+    $errores[] = "El código de empleado solo debe contener letras y números.";
 }
 
 if (empty($correo)) {
-    $errores[] = "El correo electrónico es obligatorio.";
+    $errores[] = "El correo es obligatorio.";
 } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-    $errores[] = "El correo electrónico no es válido.";
+    $errores[] = "El correo no tiene un formato válido.";
 }
 
 if (empty($contrasena)) {
     $errores[] = "La contraseña es obligatoria.";
-} elseif (strlen($contrasena) < 8) {
-    $errores[] = "La contraseña debe tener al menos 8 caracteres.";
-} elseif (!preg_match('/[A-Za-z]/', $contrasena) || !preg_match('/[0-9]/', $contrasena) || !preg_match('/[\W_]/', $contrasena)) {
-    $errores[] = "La contraseña debe contener al menos una letra, un número y un carácter especial.";
+} elseif (strlen($contrasena) < 8 || !preg_match('/[A-Za-z]/', $contrasena) || !preg_match('/[0-9]/', $contrasena) || !preg_match('/[\W_]/', $contrasena)) {
+    $errores[] = "La contraseña debe tener al menos 8 caracteres, incluir letras, números y un carácter especial.";
 }
 
-if (empty($id_rol)) {
-    $errores[] = "El rol es obligatorio.";
+if ($id_rol <= 0) {
+    $errores[] = "Debe seleccionar un rol válido.";
 }
 
-if (count($errores) > 0) {
+// Mostrar errores si existen
+if (!empty($errores)) {
     $_SESSION['mensaje'] = implode("<br>", $errores);
     $_SESSION['tipo'] = "error";
     header("Location: ../admin/listar_usuario.php");
@@ -43,51 +43,44 @@ if (count($errores) > 0) {
 }
 
 try {
+    // Verificar que el empleado exista en la tabla empleados
+    $stmtEmp = $conexion->prepare("SELECT COUNT(*) FROM empleados WHERE codigo_empleado = ?");
+    $stmtEmp->execute([$codigo_empleado]);
+    if ($stmtEmp->fetchColumn() == 0) {
+        throw new Exception("El código de empleado no existe en la base de datos.");
+    }
+
+    // Verificar que el rol exista
+    $stmtRol = $conexion->prepare("SELECT COUNT(*) FROM roles WHERE id_rol = ?");
+    $stmtRol->execute([$id_rol]);
+    if ($stmtRol->fetchColumn() == 0) {
+        throw new Exception("El rol seleccionado no existe.");
+    }
+
     // Verificar duplicados
-    $verificar = $conexion->prepare("SELECT COUNT(*) FROM usuarios WHERE codigo_empleado = ? OR correo = ?");
-    $verificar->execute([$codigo_empleado, $correo]);
-
-    if ($verificar->fetchColumn() > 0) {
-        $_SESSION['mensaje'] = "Este empleado o correo ya está registrado.";
-        $_SESSION['tipo'] = "error";
-        header("Location: ../admin/listar_usuario.php");
-        exit;
+    $stmtDup = $conexion->prepare("SELECT COUNT(*) FROM usuarios WHERE codigo_empleado = ? OR correo = ?");
+    $stmtDup->execute([$codigo_empleado, $correo]);
+    if ($stmtDup->fetchColumn() > 0) {
+        throw new Exception("Este usuario o correo ya está registrado.");
     }
 
-    // Verificar rol válido
-    $verificar_rol = $conexion->prepare("SELECT COUNT(*) FROM roles WHERE id_rol = ?");
-    $verificar_rol->execute([$id_rol]);
+    // Hashear la contraseña
+    $hash = password_hash($contrasena, PASSWORD_BCRYPT);
 
-    if ($verificar_rol->fetchColumn() == 0) {
-        $_SESSION['mensaje'] = "El rol seleccionado no es válido.";
-        $_SESSION['tipo'] = "error";
-        header("Location: ../admin/listar_usuario.php");
-        exit;
-    }
+    // Insertar usuario
+    $stmt = $conexion->prepare("INSERT INTO usuarios (codigo_empleado, correo, contrasena, id_rol, activo) 
+                                VALUES (?, ?, ?, ?, TRUE)");
+    $stmt->execute([$codigo_empleado, $correo, $hash, $id_rol]);
 
-    // Encriptar contraseña
-    $contrasena_hash = password_hash($contrasena, PASSWORD_BCRYPT);
-
-    // Insertar en BD
-    $sql = "INSERT INTO usuarios (codigo_empleado, correo, contrasena, id_rol, activo) 
-            VALUES (:codigo_empleado, :correo, :contrasena, :id_rol, TRUE)";
-    
-    $stmt = $conexion->prepare($sql);
-    $stmt->execute([
-        ':codigo_empleado' => $codigo_empleado,
-        ':correo' => $correo,
-        ':contrasena' => $contrasena_hash,
-        ':id_rol' => $id_rol
-    ]);
-
-    $_SESSION['mensaje'] = "Usuario registrado con éxito.";
+    $_SESSION['mensaje'] = "Usuario registrado correctamente.";
     $_SESSION['tipo'] = "success";
     header("Location: ../admin/listar_usuario.php");
     exit;
 
-} catch (PDOException $e) {
+} catch (Exception $e) {
     $_SESSION['mensaje'] = "Error: " . $e->getMessage();
     $_SESSION['tipo'] = "error";
     header("Location: ../admin/listar_usuario.php");
     exit;
 }
+?>
