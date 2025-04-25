@@ -1,5 +1,5 @@
 /* ========== BASE ========== */
-body {
+html, body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #f1f5f9;
   margin: 0;
@@ -7,7 +7,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* ========== WRAPPER GENERAL ========== */
@@ -31,7 +31,7 @@ body {
   justify-content: space-between;
   padding: 0 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  transition: height 0.3s ease, background-color 0.3s ease;
   z-index: 1040;
 }
 
@@ -64,9 +64,14 @@ body {
   display: none;
   cursor: pointer;
   margin-left: auto;
+  transition: background-color 0.3s;
 }
 
-/* Mostrar botón solo en dispositivos pequeños */
+.toggle-btn:focus {
+  outline: 2px dashed #ffffff;
+  outline-offset: 3px;
+}
+
 @media (max-width: 992px) {
   .toggle-btn {
     display: inline-block;
@@ -89,7 +94,7 @@ body {
   transition: transform 0.3s ease-in-out;
 }
 
-/* Scrollbar del sidebar */
+/* Scrollbar personalizado */
 .sidebar::-webkit-scrollbar {
   width: 8px;
 }
@@ -101,7 +106,7 @@ body {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Sidebar oculto por defecto en móviles */
+/* Sidebar oculto en móviles */
 @media (max-width: 992px) {
   .sidebar {
     transform: translateX(-100%);
@@ -111,13 +116,13 @@ body {
   }
 }
 
-/* Contenedor interno del sidebar */
+/* Sidebar interno */
 .sidebar-inner {
   position: relative;
   will-change: transform;
 }
 
-/* Fades visuales arriba y abajo del sidebar */
+/* Fades arriba y abajo */
 .sidebar-fade {
   position: absolute;
   left: 0;
@@ -142,7 +147,7 @@ body {
   opacity: 1;
 }
 
-/* ========== SIDEBAR CONTENIDO (TÍTULOS Y LINKS) ========== */
+/* Encabezados del sidebar */
 .sidebar-header,
 .nav-section-title {
   padding: 10px 20px;
@@ -151,6 +156,7 @@ body {
   text-transform: uppercase;
 }
 
+/* Links del sidebar */
 .nav-link {
   padding: 12px 20px;
   color: #e0f2fe;
@@ -174,6 +180,11 @@ body {
   padding-left: 26px;
 }
 
+.nav-link:focus {
+  outline: 2px dashed #ffffff;
+  outline-offset: 3px;
+}
+
 /* ========== MAIN CONTENT ========== */
 .main-content {
   margin-left: 260px;
@@ -188,17 +199,18 @@ body {
 @media (max-width: 992px) {
   .main-content {
     margin-left: 0;
+    padding: 1rem;
   }
 }
 
-/* ========== CONTENEDOR INTERNO DE CONTENIDO ========== */
+/* Contenido interno centrado */
 .content-wrapper {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
 }
 
-/* ========== TARJETAS ========== */
+/* Tarjetas */
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -216,4 +228,35 @@ footer {
   font-size: 0.9rem;
   color: #6c757d;
   border-top: 1px solid #dee2e6;
+}
+
+/* ========== COLORES PERSONALIZADOS ========== */
+.bg-primary {
+  background-color: #1e3a8a !important;
+}
+.text-primary {
+  color: #1e3a8a !important;
+}
+
+/* Botón claro al pasar mouse */
+.btn-outline-light:hover {
+  background-color: #ffffff;
+  color: #1e3a8a;
+}
+
+/* ========== ADAPTACIONES EXTRA PEQUEÑAS ========== */
+@media (max-width: 576px) {
+  .navbar-brand span {
+    font-size: 1rem;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+
+  .toggle-btn {
+    font-size: 1.25rem;
+    padding: 6px 10px;
+  }
 }
