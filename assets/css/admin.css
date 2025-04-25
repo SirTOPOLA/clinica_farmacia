@@ -37,21 +37,14 @@ html, body {
 .header.shrink nav {
   padding-block: 0.25rem !important;
 }
-
-.header.shrink .navbar-brand {
-  font-size: 1rem;
-}
-
-.header.shrink .bi-hospital-fill {
-  font-size: 1.2rem;
-}
-
+.header.shrink .navbar-brand { font-size: 1rem; }
+.header.shrink .bi-hospital-fill { font-size: 1.2rem; }
 .header.shrink .badge {
   padding: 0.25rem 0.6rem;
   font-size: 0.75rem;
 }
 
-/* ========== TOGGLE BUTTON (MÓVIL/TABLET) ========== */
+/* ========== TOGGLE BUTTON ========== */
 .toggle-btn {
   background-color: #1e40af;
   border: none;
@@ -60,16 +53,13 @@ html, body {
   border-radius: 5px;
   font-size: 1.5rem;
   cursor: pointer;
-  margin-left: auto;
   display: none;
   transition: background-color 0.3s;
 }
-
 .toggle-btn:focus {
   outline: 2px dashed #ffffff;
   outline-offset: 3px;
 }
-
 @media (max-width: 992px) {
   .toggle-btn {
     display: inline-block;
@@ -91,18 +81,10 @@ html, body {
   z-index: 1050;
 }
 @media (max-width: 992px) {
-  .sidebar {
-  
-    transform: translateX(-100%);
-  }
-
-  .sidebar.show {
-    transform: translateX(0);
-  }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.show { transform: translateX(0); }
 }
 
-
- 
 .sidebar::-webkit-scrollbar {
   width: 8px;
 }
@@ -114,7 +96,7 @@ html, body {
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Fades */
+/* SIDEBAR EFECTOS VISUALES */
 .sidebar-fade {
   position: absolute;
   left: 0;
@@ -124,19 +106,16 @@ html, body {
   transition: opacity 0.3s ease;
   z-index: 2;
 }
-
 .sidebar-fade.top {
   top: 0;
   background: linear-gradient(to bottom, rgba(30, 58, 138, 1), rgba(30, 58, 138, 0));
   opacity: 0;
 }
-
 .sidebar-fade.bottom {
   bottom: 0;
   background: linear-gradient(to top, rgba(30, 58, 138, 1), rgba(30, 58, 138, 0));
   opacity: 0;
 }
-
 .sidebar.show-fade-top .sidebar-fade.top,
 .sidebar.show-fade-bottom .sidebar-fade.bottom {
   opacity: 1;
@@ -152,7 +131,6 @@ html, body {
   font-weight: 600;
   letter-spacing: 0.5px;
 }
-
 .nav-link {
   padding: 12px 20px;
   color: #e0f2fe;
@@ -160,28 +138,25 @@ html, body {
   align-items: center;
   margin: 3px 12px;
   border-radius: 6px;
-  transition: background-color 0.2s ease, padding-left 0.3s ease;
   text-decoration: none;
+  transition: background-color 0.2s ease, padding-left 0.3s ease;
 }
-
 .nav-link i {
   margin-right: 12px;
   font-size: 1.2rem;
 }
-
 .nav-link:hover,
 .nav-link.active {
   background-color: #3b82f6;
   color: #fff;
   padding-left: 26px;
 }
-
 .nav-link:focus-visible {
   outline: 2px dashed #ffffff;
   outline-offset: 3px;
 }
 
-/* Agrupación visual */
+/* Agrupación de módulos */
 .sidebar-section {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
@@ -191,43 +166,23 @@ html, body {
   transition: background-color 0.3s ease;
 }
 
-.sidebar-section .nav-link {
-  margin: 3px 12px;
-  padding: 10px 20px;
-}
-
-.sidebar::after {
-  content: "";
-  display: block;
-  height: 30px;
-  background: linear-gradient(to top, #1e3a8a, transparent);
-}
-
 /* ========== MAIN CONTENT ========== */
 .main-content {
   margin-left: 260px;
   margin-top: 60px;
   padding: 2rem;
-  overflow-y: auto;
   flex: 1;
   background-color: #f1f5f9;
   transition: margin-left 0.3s ease;
+  overflow-y: auto;
   user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
   outline: none;
   caret-color: transparent;
 }
-
 @media (max-width: 992px) {
   .main-content {
     margin-left: 0;
     padding: 1rem;
-    user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  outline: none;
-  caret-color: transparent;
   }
 }
 
@@ -257,47 +212,31 @@ footer {
 }
 
 /* ========== COLORES UTILITARIOS ========== */
-.bg-primary {
-  background-color: #1e3a8a !important;
-}
-
-.text-primary {
-  color: #1e3a8a !important;
-}
+.bg-primary { background-color: #1e3a8a !important; }
+.text-primary { color: #1e3a8a !important; }
 
 .btn-outline-light:hover {
   background-color: #fff;
   color: #1e3a8a;
 }
 
-/* ========== RESPONSIVE PEQUEÑOS ========== */
+/* ========== RESPONSIVE AJUSTES PEQUEÑOS ========== */
 @media (max-width: 576px) {
-  .navbar-brand span {
-    font-size: 1rem;
-  }
-
-  .badge {
-    font-size: 0.75rem;
-    padding: 6px 10px;
-  }
-
-  .toggle-btn {
-    font-size: 1.25rem;
-    padding: 6px 10px;
-  }
+  .navbar-brand span { font-size: 0.95rem; }
+  .navbar .badge { font-size: 0.7rem; padding: 4px 8px; }
+  .navbar .fw-semibold { font-size: 0.85rem; }
+  .toggle-btn { font-size: 1.25rem; padding: 6px 10px; }
 }
 
-/* ========== BODY NO SCROLL EN MÓVIL ========== */
+/* ========== BODY NO SCROLL MÓVIL ========== */
 .no-scroll {
   overflow: hidden;
 }
 
- 
- 
-/* ========== OVERLAY ANIMADO ESTILO iOS ========== */
+/* ========== OVERLAY RESPONSIVE ========== */
 .sidebar-overlay {
   position: fixed;
-  top: 60px; /* debajo del header */
+  top: 60px;
   left: 0;
   width: 100%;
   height: calc(100vh - 60px);
@@ -307,36 +246,16 @@ footer {
   z-index: 1045;
   opacity: 0;
   pointer-events: none;
-  transition:
-    opacity 0.3s ease,
-    backdrop-filter 0.3s ease,
-    -webkit-backdrop-filter 0.3s ease;
+  transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
 }
-
 .sidebar-overlay.active {
   opacity: 1;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   pointer-events: all;
 }
- 
-
 @media (min-width: 993px) {
   .sidebar-overlay {
     display: none;
   }
 }
-@media (max-width: 576px) {
-  .navbar-brand span {
-    font-size: 0.95rem;
-  }
-  .navbar .badge {
-    font-size: 0.7rem;
-    padding: 4px 8px;
-  }
-  .navbar .fw-semibold {
-    font-size: 0.85rem;
-  }
-}
-
-
