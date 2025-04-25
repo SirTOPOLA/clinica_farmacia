@@ -92,29 +92,34 @@ if ($id_usuario > 0) {
   </script>
 </head>
 <header class="header fixed-top w-100 shadow-sm">
-  <nav class="navbar navbar-expand-lg bg-primary px-3">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <!-- Lado izquierdo -->
-      <div class="d-flex align-items-center gap-3">
-        <button class="toggle-btn btn btn-outline-light d-lg-none" aria-label="Menú" >
-          <i class="bi bi-list"></i>
-        </button>
-        <a href="#" class="navbar-brand d-flex align-items-center gap-2 text-white text-decoration-none">
-          <i class="bi bi-hospital-fill fs-4"></i>
-          <span class="fw-bold fs-5">Clínica y Farmacia</span>
-        </a>
-      </div>
+  <nav class="navbar navbar-expand-lg bg-primary px-3 w-100">
+    <div class="container-fluid align-items-center">
+      <div class="d-flex w-100 flex-column flex-lg-row justify-content-between align-items-center">
+        
+        <!-- Lado izquierdo -->
+        <div class="d-flex align-items-center gap-3">
+          <button class="toggle-btn btn btn-outline-light d-lg-none" aria-label="Menú">
+            <i class="bi bi-list"></i>
+          </button>
+          <a href="#" class="navbar-brand d-flex align-items-center gap-2 text-white text-decoration-none mb-2 mb-lg-0">
+            <i class="bi bi-hospital-fill fs-4"></i>
+            <span class="fw-bold fs-5">Clínica y Farmacia</span>
+          </a>
+        </div>
 
-      <!-- Lado derecho -->
-      <div class="d-flex align-items-center gap-3 text-white flex-wrap">
-        <span class="fw-semibold d-flex align-items-center">
-          <i class="bi bi-person-circle me-2 fs-5"></i>
-          <?= htmlspecialchars($nombre_empleado ?? 'Usuario', ENT_QUOTES, 'UTF-8') ?>
-        </span>
-        <span class="badge bg-light text-primary text-capitalize d-flex align-items-center px-3 py-2 rounded-pill">
-          <i class="bi bi-shield-lock-fill me-2"></i><?= htmlspecialchars($rol, ENT_QUOTES, 'UTF-8') ?>
-        </span>
+        <!-- Lado derecho -->
+        <div class="d-flex align-items-center gap-3 text-white flex-wrap">
+          <span class="fw-semibold d-flex align-items-center">
+            <i class="bi bi-person-circle me-2 fs-5"></i>
+            <?= htmlspecialchars($nombre_empleado ?? 'Usuario', ENT_QUOTES, 'UTF-8') ?>
+          </span>
+          <span class="badge bg-light text-primary text-capitalize d-flex align-items-center px-3 py-2 rounded-pill">
+            <i class="bi bi-shield-lock-fill me-2"></i><?= htmlspecialchars($rol ?? 'Invitado', ENT_QUOTES, 'UTF-8') ?>
+          </span>
+        </div>
+
       </div>
     </div>
   </nav>
 </header>
+
