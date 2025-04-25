@@ -1,33 +1,6 @@
 <?php
 include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
-
-// Cargar pacientes desde la base de datos
-try {
-  $stmt = $conexion->query("SELECT codigo, nombre, apellido FROM pacientes ORDER BY nombre");
-  $pacientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-  echo "<div class='alert alert-danger'>Error al cargar pacientes: " . $e->getMessage() . "</div>";
-  $pacientes = [];
-}
-
-// Cargar médicos activos desde la base de datos
-try {
-  // Consulta SQL para obtener médicos activos
-  $sql = "
-      SELECT e.id_empleado, e.nombre, e.apellido
-      FROM empleados e
-      INNER JOIN usuarios u ON e.codigo_empleado = u.codigo_empleado
-      INNER JOIN roles r ON u.id_rol = r.id_rol
-      WHERE r.nombre_rol = 'MEDICO' AND u.activo = TRUE
-      ORDER BY e.nombre
-  ";
-  $stmt = $conexion->query($sql);
-  $medicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-  echo "<div class='alert alert-danger'>Error al cargar médicos: " . $e->getMessage() . "</div>";
-  $medicos = [];
-}
 ?>
 
 <!-- Main Content -->
@@ -38,81 +11,59 @@ try {
     </div>
 
     <div class="card-body">
+      <form action="guardar_cita.php" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="paciente" class="form-label">Paciente</label>
+          <select class="form-select" id="paciente" name="id_paciente" required>
+            <option selected disabled value="">Seleccione un paciente</option>
+            <option value="1">Juan Pérez</option>
+            <option value="2">María García</option>
+          </select>
+          <div class="invalid-feedback">Seleccione un paciente.</div>
+        </div>
 
+        <div class="mb-3">
+          <label for="empleado" class="form-label">Empleado (Doctor)</label>
+          <select class="form-select" id="empleado" name="id_empleado" required>
+            <option selected disabled value="">Seleccione un médico</option>
+            <option value="1">Dra. Ana López</option>
+            <option value="2">Dr. Carlos Ruiz</option>
+          </select>
+          <div class="invalid-feedback">Seleccione un médico responsable.</div>
+        </div>
 
-    <form action="guardar_cita.php" method="POST" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="fecha_cita" class="form-label">Fecha de la Cita</label>
+          <input type="date" class="form-control" id="fecha_cita" name="fecha_cita" required>
+          <div class="invalid-feedback">Ingrese una fecha válida.</div>
+        </div>
 
-<!-- Campo para filtrar pacientes -->
-<div class="mb-3">
-  <label for="filtroPaciente" class="form-label">Buscar Paciente</label>
-  <input type="text" class="form-control" id="filtroPaciente" placeholder="Buscar por nombre, apellido o código...">
-</div>
+        <div class="mb-3">
+          <label for="hora_cita" class="form-label">Hora de la Cita</label>
+          <input type="time" class="form-control" id="hora_cita" name="hora_cita" required>
+          <div class="invalid-feedback">Ingrese una hora válida.</div>
+        </div>
 
-<!-- Lista dinámica de pacientes con radio buttons, oculta inicialmente -->
-<div class="mb-3" id="listaPacientesContainer" style="display: none;">
-  <label class="form-label">Seleccione un paciente</label>
-  <div class="list-group" id="listaPacientes">
-    <!-- Pacientes se cargarán dinámicamente aquí -->
-  </div>
-  <div class="invalid-feedback">Seleccione un paciente.</div>
-</div>
+        <div class="mb-3">
+          <label for="estado" class="form-label">Estado</label>
+          <select class="form-select" id="estado" name="estado" required>
+            <option value="pendiente" selected>Pendiente</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="completada">Completada</option>
+          </select>
+          <div class="invalid-feedback">Seleccione el estado de la cita.</div>
+        </div>
 
-<!-- Empleado (Doctor) -->
-<div class="mb-3">
-  <label for="empleado" class="form-label">Empleado (Doctor)</label>
-  <select class="form-select" id="empleado" name="id_empleado" required>
-    <option selected disabled value="">Seleccione un médico</option>
-    <?php foreach ($medicos as $medico): ?>
-      <option value="<?php echo $medico['id_empleado']; ?>" style="background-color: #f0f8ff;">
-        <?php echo $medico['nombre'] . ' ' . $medico['apellido']; ?>
-      </option>
-    <?php endforeach; ?>
-  </select>
-  <div class="invalid-feedback">Seleccione un médico responsable.</div>
-</div>
-
-<!-- Fecha de la cita -->
-<div class="mb-3">
-  <label for="fecha_cita" class="form-label">Fecha de la Cita</label>
-  <input type="date" class="form-control" id="fecha_cita" name="fecha_cita" required>
-  <div class="invalid-feedback">Ingrese una fecha válida.</div>
-</div>
-
-<!-- Hora de la cita -->
-<div class="mb-3">
-  <label for="hora_cita" class="form-label">Hora de la Cita</label>
-  <input type="time" class="form-control" id="hora_cita" name="hora_cita" required>
-  <div class="invalid-feedback">Ingrese una hora válida.</div>
-</div>
-
-<!-- Estado de la cita -->
-<div class="mb-3">
-  <label for="estado" class="form-label">Estado</label>
-  <select class="form-select" id="estado" name="estado" required>
-    <option value="pendiente" selected>Pendiente</option>
-    <option value="confirmada">Confirmada</option>
-    <option value="cancelada">Cancelada</option>
-    <option value="completada">Completada</option>
-  </select>
-  <div class="invalid-feedback">Seleccione el estado de la cita.</div>
-</div>
-
-<!-- Botones -->
-<div class="d-flex justify-content-between">
-  <a href="listar_cita.php" class="btn btn-secondary">
-    <i class="bi bi-arrow-left"></i> Volver
-  </a>
-  <button type="submit" class="btn btn-primary px-4">
-    <i class="bi bi-save me-1"></i> Guardar Cita
-  </button>
-</div>
-
-</form>
-
-   
-
-
-
+        <div class="d-flex justify-content-between">
+          <a href="listar_cita.php" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+          </a>
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="bi bi-save me-1"></i> Guardar Cita
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

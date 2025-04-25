@@ -28,47 +28,109 @@ if ($id_usuario > 0) {
 ?>
 
 
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
+  <!-- Codificación y compatibilidad -->
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Responsividad -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Panel de gestión profesional para una clínica y farmacia.">
-  <meta name="keywords" content="clínica, farmacia, gestión médica, sistema de salud, dashboard">
-  <meta name="author" content="Jesús Crispín Topolá Boñaho">
-  <meta property="og:title" content="Panel de Clínica y Farmacia">
-  <meta property="og:description" content="Sistema completo para gestionar una clínica y su farmacia.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="../assets/img/preview.jpg">
-  <meta property="og:url" content="https://tusitio.com/dashboard">
-  <meta name="robots" content="noindex, nofollow">
+
+  <!-- SEO básico -->
   <title>Dashboard | Clínica y Farmacia</title>
-  <link rel="icon" href="../assets/img/favicon.png" type="image/png">
+  <meta name="description" content="Sistema web profesional para la gestión completa de una clínica y farmacia, con panel administrativo moderno, seguro y responsivo.">
+  <meta name="keywords" content="clínica, farmacia, salud, gestión médica, sistema web, panel administrativo, pacientes, empleados, medicamentos">
+  <meta name="author" content="Jesús Crispín Topolá Boñaho">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph (para compartir en redes sociales como Facebook, WhatsApp) -->
+  <meta property="og:title" content="Panel de Clínica y Farmacia">
+  <meta property="og:description" content="Gestiona fácilmente una clínica y su farmacia desde un solo lugar.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://tusitio.com/assets/img/preview.jpg">
+  <meta property="og:url" content="https://tusitio.com/dashboard">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Panel de Clínica y Farmacia">
+  <meta name="twitter:description" content="Sistema completo para clínicas y farmacias.">
+  <meta name="twitter:image" content="https://tusitio.com/assets/img/preview.jpg">
+  <meta name="twitter:site" content="@TuUsuarioTwitter">
+
+  <!-- Icono -->
+  <link rel="icon" href="https://tusitio.com/assets/img/favicon.png" type="image/png">
+
+  <!-- Estilos y fuentes -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/admin.css">
-  <style>
-   
-  </style>
+
+  <!-- Lenguaje estructurado (opcional, mejora SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Sistema Clínica y Farmacia",
+    "url": "https://tusitio.com/dashboard",
+    "author": {
+      "@type": "Person",
+      "name": "Salvador Mete y J.C. Topolá"
+    },
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web",
+    "description": "Aplicación web para la gestión de clínicas y farmacias con funciones avanzadas de administración, triaje, inventario, pacientes y empleados.",
+    "image": "https://tusitio.com/assets/img/preview.jpg"
+  }
+  </script>
 </head>
 
-<body>
-  <div class="d-flex flex-column min-vh-100">
+<!-- Header fijo -->
+<!-- <header class="header">
+    <nav class="navbar navbar-expand-lg bg-primary shadow-sm px-4 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <button class="btn btn-light d-lg-none me-2" id="toggleSidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="navbar-brand mb-0 h1 text-white d-flex align-items-center">
+                <i class="bi bi-hospital-fill me-2"></i> Clínica y Farmacia
+            </span>
+        </div>
+        <div class="ms-auto d-flex align-items-center gap-3 text-white">
+             
+        </div>
+    </nav>
+</header>
+ -->
 
-    <!-- Header -->
-    <header>
-      <nav class="navbar navbar-expand-lg bg-light shadow px-4 mb-4 d-flex justify-content-between align-items-center">
-        <button class="btn toggle-btn d-lg-none me-2" onclick="document.querySelector('.sidebar').classList.toggle('show')">
+ <header class="header fixed-top shadow-sm w-100">
+  <nav class="navbar navbar-expand-lg bg-primary px-4 w-100">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <!-- Lado izquierdo -->
+      <div class="d-flex align-items-center gap-3">
+        <button class="toggle-btn btn btn-primary d-lg-none" onclick="toggleSidebar()">
           <i class="bi bi-list"></i>
         </button>
-        <span class="navbar-brand mb-0 h1 text-dark d-flex align-items-center">
-          <i class="bi bi-hospital-fill me-2"></i> Clínica y Farmacia
+        <span class="navbar-brand mb-0 h1 text-white d-flex align-items-center gap-2">
+          <i class="bi bi-hospital-fill fs-4"></i>
+          <span class="fw-bold fs-5">Clínica y Farmacia</span>
         </span>
-        <div class="ms-auto d-flex align-items-center gap-3 text-dark">
-          <span class="fw-semibold"><i class="bi bi-person-circle me-1"></i><?= $nombre_empleado ?? 'Usuario' ?></span>
-          <span class="badge bg-light text-dark text-capitalize"><i class="bi bi-shield-lock-fill me-1"></i><?= $rol ?></span>
-        </div>
-      </nav>
-    </header>
+      </div>
+
+      <!-- Lado derecho -->
+      <div class="d-flex align-items-center gap-3 text-white">
+        <span class="fw-semibold d-flex align-items-center">
+          <i class="bi bi-person-circle me-2 fs-5"></i>
+          <?= $nombre_empleado ?? 'Usuario' ?>
+        </span>
+        <span class="badge bg-light text-primary text-capitalize d-flex align-items-center px-3 py-2 rounded-pill">
+          <i class="bi bi-shield-lock-fill me-2"></i><?= $rol ?>
+        </span>
+      </div>
+    </div>
+  </nav>
+</header>
+
+ 
