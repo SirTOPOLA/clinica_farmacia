@@ -15,7 +15,7 @@ if ($id_usuario > 0) {
             JOIN roles r ON u.id_rol = r.id_rol
             WHERE u.id_usuario = ? LIMIT 1";
 
-    $stmt = $conn->prepare($sql);
+    $stmt = $conexion->prepare($sql);
     $stmt->execute([$id_usuario]);
     $stmt->execute();
     $resultado = $stmt->get_result();
