@@ -30,21 +30,21 @@
     <div class="col-md-6 p-4 d-flex align-items-center justify-content-center">
     <div class="login-form">
   <h3 class="mb-4 text-center text-success fw-semibold">Bienvenido a <span class="fw-bold">FarmaSalud</span></h3>
-  <form action="procesar_login.php" method="POST" novalidate>
+  <form action="./php/login.php" method="POST" novalidate>
     
     <div class="mb-4">
-      <label for="usuario" class="form-label fw-semibold">Usuario</label>
+      <label for="correo" class="form-label fw-semibold">Usuario</label>
       <div class="input-group shadow-sm rounded">
         <span class="input-group-text bg-white border-end-0"><i class="bi bi-person text-success"></i></span>
-        <input type="text" id="usuario" name="usuario" class="form-control border-start-0" placeholder="Ingrese su usuario" required aria-label="Usuario">
+        <input type="email" id="usuario" name="correo" class="form-control border-start-0" placeholder="Ingrese su usuario" required aria-label="Usuario">
       </div>
     </div>
 
     <div class="mb-4">
-      <label for="clave" class="form-label fw-semibold">Contraseña</label>
+      <label for="contrasena" class="form-label fw-semibold">Contraseña</label>
       <div class="input-group shadow-sm rounded">
         <span class="input-group-text bg-white border-end-0"><i class="bi bi-lock text-success"></i></span>
-        <input type="password" id="clave" name="clave" class="form-control border-start-0" placeholder="Ingrese su contraseña" required aria-label="Contraseña">
+        <input type="password" id="clave" name="contrasena" class="form-control border-start-0" placeholder="Ingrese su contraseña" required aria-label="Contraseña">
       </div>
     </div>
 
@@ -53,7 +53,8 @@
     </div>
 
     <div class="text-center">
-      <a href="#" class="text-decoration-none text-success small">¿Olvidaste tu contraseña?</a>
+      
+      <a href="registrar.php" class="registrar">registrar</a>
     </div>
   </form>
 </div>

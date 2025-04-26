@@ -1,49 +1,48 @@
-<?php 
+<?php
 include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
 ?>
-  <!-- Main Content -->
-  <div class="main-content">
-     <!-- Sección de Log de Usuarios -->
-<div id="logs" class="card p-4 mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0"><i class="bi bi-clipboard-data me-2"></i> Historial de Actividades</h4>
-    <a href="registrar_log_usuario.php" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i> log
-      </a>
+
+<div class="main-content">
+  <div class="conten-wrapper">
+    <div class="card shadow-lg mt-4 border-0">
+      <div class="card-header d-flex justify-content-between align-items-center bg-dark text-white rounded-top">
+        <h2 class="mb-0"><span class="material-icons">history</span> Registro de Actividad de Usuarios</h2>
+      </div>
+ <!-- para las alertas -->
+ <div id="alert-container" class="mb-3">
+        <?php include_once("../includes/sidebar.php"); ?>
+      </div>
+      <div class="card-body bg-light">
+        <div class="row mb-3 justify-content-center">
+          <div class="col-md-6">
+            <div class="input-group">
+              <input type="text" id="buscar" class="form-control shadow-sm rounded"
+                     placeholder="🔍 Buscar por acción, IP o usuario..." oninput="buscarLogs()">
+            </div>
+          </div>
+        </div>
+
+        <div id="tabla-logs" class="table-responsive">
+          <table class="table table-striped table-hover shadow-sm rounded">
+            <thead class="bg-secondary text-white">
+              <tr>
+                <th><span class="material-icons">person</span> Usuario</th>
+                <th><span class="material-icons">assignment</span> Acción</th>
+                <th><span class="material-icons">event</span> Fecha</th>
+                <th><span class="material-icons">public</span> IP</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div id="paginacion" class="d-flex justify-content-center"></div>
+      </div>
+    </div>
   </div>
-  <table class="table table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>#</th>
-        <th>Usuario</th>
-        <th>Acción</th>
-        <th>Fecha</th>
-        <th>IP</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>admin@example.com</td>
-        <td>Inicio sesión</td>
-        <td>2025-04-24 08:35:12</td>
-        <td>192.168.1.10</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>medico1@example.com</td>
-        <td>Registró una cita médica</td>
-        <td>2025-04-24 09:10:42</td>
-        <td>192.168.1.15</td>
-      </tr>
-      <!-- Más registros... -->
-    </tbody>
-  </table>
 </div>
 
  
-</div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

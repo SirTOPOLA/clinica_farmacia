@@ -57,7 +57,7 @@ $menu = [
         ['listar_farmacia.php', 'bi bi-capsule', 'Farmacia', ['recepcion', 'administrador']],
     ],
     'Administración' => [
-        ['listar_historial.php', 'bi bi-clock-history', 'Historial', ['administrador']],
+        ['listar_historial_medico.php', 'bi bi-clock-history', 'Historial', ['administrador']],
         ['listar_empleado.php', 'bi bi-person-badge', 'Empleados', ['administrador']],
         ['listar_usuario.php', 'bi bi-person-gear', 'Usuarios', ['administrador']],
         ['listar_notificaciones.php', 'bi bi-bell', 'Notificaciones', ['administrador']],
