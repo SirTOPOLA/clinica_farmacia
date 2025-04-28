@@ -1,86 +1,59 @@
 <?php
-session_start();
-require_once '../config/conexion.php';
+session_start();  // Asegurarse de que la sesión esté iniciada
+/* var_dump($_POST); // Mostrar los datos enviados para verificar
+exit();
+  */
+// Conexión a la base de datos
+include_once("../config/Conexion.php");
+ 
 
-// Sanitizar y validar entradas
-$codigo_empleado = htmlspecialchars(trim($_POST['codigo_empleado'] ?? ''));
-$correo = filter_var(trim($_POST['correo'] ?? ''), FILTER_SANITIZE_EMAIL);
-$contrasena = trim($_POST['contrasena'] ?? '');
-$id_rol = intval($_POST['id_rol'] ?? 0);
+// Verificar si el formulario ha sido enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtener los datos del formulario
+    $empleado_id = $_POST['empleado_id'];
+    $correo = $_POST['correo'];
+    $codigo_empleado = $_POST['codigo_empleado'];
+    $password = $_POST['password'];
+    $rol = $_POST['rol'];
 
-// Inicializar arreglo de errores
-$errores = [];
-
-// Validaciones
-if (empty($codigo_empleado)) {
-    $errores[] = "El código de empleado es obligatorio.";
-} elseif (!preg_match('/^[A-Za-z0-9]+$/', $codigo_empleado)) {
-    $errores[] = "El código de empleado solo debe contener letras y números.";
-}
-
-if (empty($correo)) {
-    $errores[] = "El correo es obligatorio.";
-} elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-    $errores[] = "El correo no tiene un formato válido.";
-}
-
-if (empty($contrasena)) {
-    $errores[] = "La contraseña es obligatoria.";
-} elseif (strlen($contrasena) < 8 || !preg_match('/[A-Za-z]/', $contrasena) || !preg_match('/[0-9]/', $contrasena) || !preg_match('/[\W_]/', $contrasena)) {
-    $errores[] = "La contraseña debe tener al menos 8 caracteres, incluir letras, números y un carácter especial.";
-}
-
-if ($id_rol <= 0) {
-    $errores[] = "Debe seleccionar un rol válido.";
-}
-
-// Mostrar errores si existen
-if (!empty($errores)) {
-    $_SESSION['mensaje'] = implode("<br>", $errores);
-    $_SESSION['tipo'] = "error";
-    header("Location: ../admin/listar_usuario.php");
-    exit;
-}
-
-try {
-    // Verificar que el empleado exista en la tabla empleados
-    $stmtEmp = $conexion->prepare("SELECT COUNT(*) FROM empleados WHERE codigo_empleado = ?");
-    $stmtEmp->execute([$codigo_empleado]);
-    if ($stmtEmp->fetchColumn() == 0) {
-        throw new Exception("El código de empleado no existe en la base de datos.");
+    // Verificar si los campos no están vacíos
+    if (empty($empleado_id) || empty($correo) || empty($codigo_empleado) || empty($password) || empty($rol)) {
+        $_SESSION['alerta'] = ['tipo' => 'warning', 'mensaje' => "Todos los campos son obligatorios."];
+        header("Location: ../admin/registrar_usuario.php");
+        exit();
     }
 
-    // Verificar que el rol exista
-    $stmtRol = $conexion->prepare("SELECT COUNT(*) FROM roles WHERE id_rol = ?");
-    $stmtRol->execute([$id_rol]);
-    if ($stmtRol->fetchColumn() == 0) {
-        throw new Exception("El rol seleccionado no existe.");
+    try {
+        // Preparar la consulta para insertar el nuevo usuario
+        $stmt = $conexion->prepare("INSERT INTO usuarios (  codigo_empleado, correo, contrasena, id_rol) VALUES (   :codigo_empleado, :correo, :password, :rol)");
+
+        // Encriptar la contraseña
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Vincular los parámetros con el valor ;
+        $stmt->bindParam(':codigo_empleado', $codigo_empleado);
+        $stmt->bindParam(':correo', $correo);
+        $stmt->bindParam(':password', $hashed_password);
+        $stmt->bindParam(':rol', $rol);
+
+        // Ejecutar la consulta
+        if ($stmt->execute()) {
+            $_SESSION['alerta'] = ['tipo'=> 'success', 'mensaje' => "Usuario registrado correctamente."];
+        } else {
+            // Obtener el error de la base de datos si algo salió mal
+            $errorInfo = $stmt->errorInfo();
+            $_SESSION['alerta'] = ['tipo' => 'error' , 'mensaje' =>"Error al registrar el usuario: " . $errorInfo[2]];
+        }
+
+        // Redirigir a la página de listado de usuarios
+        header("Location: ../admin/listar_usuario.php");
+        exit();
+
+    } catch (PDOException $e) {
+        // Manejar excepciones y almacenar el mensaje de error
+        $_SESSION['alerta'] = ['tipo' => 'error', 'mensaje' => "Error al registrar el usuario: " . $e->getMessage()];
+        header("Location: ../admin/registrar_usuario.php");
+        exit();
     }
-
-    // Verificar duplicados
-    $stmtDup = $conexion->prepare("SELECT COUNT(*) FROM usuarios WHERE codigo_empleado = ? OR correo = ?");
-    $stmtDup->execute([$codigo_empleado, $correo]);
-    if ($stmtDup->fetchColumn() > 0) {
-        throw new Exception("Este usuario o correo ya está registrado.");
-    }
-
-    // Hashear la contraseña
-    $hash = password_hash($contrasena, PASSWORD_BCRYPT);
-
-    // Insertar usuario
-    $stmt = $conexion->prepare("INSERT INTO usuarios (codigo_empleado, correo, contrasena, id_rol, activo) 
-                                VALUES (?, ?, ?, ?, TRUE)");
-    $stmt->execute([$codigo_empleado, $correo, $hash, $id_rol]);
-
-    $_SESSION['mensaje'] = "Usuario registrado correctamente.";
-    $_SESSION['tipo'] = "success";
-    header("Location: ../admin/listar_usuario.php");
-    exit;
-
-} catch (Exception $e) {
-    $_SESSION['mensaje'] = "Error: " . $e->getMessage();
-    $_SESSION['tipo'] = "error";
-    header("Location: ../admin/listar_usuario.php");
-    exit;
 }
 ?>

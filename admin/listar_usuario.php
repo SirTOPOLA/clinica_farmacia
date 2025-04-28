@@ -16,7 +16,7 @@ include_once("../includes/sidebar.php");
 
      <!-- para las alertas -->
      <div id="alert-container" class="mb-3">
-        <?php include_once("../includes/sidebar.php"); ?>
+        <?php include_once("../components/alerta.php"); ?>
       </div>
 
       <div class="card-body bg-light">
@@ -33,6 +33,7 @@ include_once("../includes/sidebar.php");
           <table class="table table-striped table-hover shadow-sm rounded">
             <thead class="bg-secondary text-white">
               <tr>
+                <th><span class="material-icons">code</span> ID</th>
                 <th><span class="material-icons">badge</span> Código</th>
                 <th><span class="material-icons">mail</span> Correo</th>
                 <th><span class="material-icons">security</span> Rol</th>
@@ -40,7 +41,7 @@ include_once("../includes/sidebar.php");
                 <th><span class="material-icons">settings</span> Acciones</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="tabla-body" ></tbody>
           </table>
         </div>
 
@@ -50,6 +51,7 @@ include_once("../includes/sidebar.php");
   </div>
 </div>
 
- 
+ <script src="../assets/js/usuarios.js"></script>
+ <script src="../assets/js/alerta.js"></script>
 </body>
 </html>

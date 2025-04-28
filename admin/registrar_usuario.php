@@ -1,105 +1,169 @@
 <?php
 include_once("../includes/header.php");
-include_once("../includes/sidebar.php");
+include_once("../includes/sidebar.php"); 
+
+// Cargar empleados activos
+try {
+    $stmt = $conexion->prepare("SELECT * FROM empleados ");
+    $stmt->execute();
+    $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error al cargar empleados: " . $e->getMessage());
+}
 ?>
-<!-- Main Content -->
-<div class="main-content container mt-4">
-    <div class="card shadow-sm border-0 rounded-4">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top-4">
-            <h5 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Registrar Nuevo Usuario</h5>
-            <a href="listar_usuarios.php" class="btn btn-light btn-sm">
-                <i class="bi bi-arrow-left-circle me-1"></i> Volver a la lista
-            </a>
-        </div>
 
-        <div class="card-body">
-            <form action="../php/insertar_usuarios.php" method="POST" class="needs-validation" novalidate>
-                <div class="row g-4">
-                    <!-- Código de Empleado -->
-                    <div class="col-md-6">
-                        <label for="codigo_empleado" class="form-label">Código de Empleado</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text"><i class="bi bi-upc-scan"></i></span>
-                            <input type="text" class="form-control" id="codigo_empleado" name="codigo_empleado" required>
-                            <div class="invalid-feedback">Campo obligatorio.</div>
-                        </div>
-                    </div>
-
-                    <!-- Correo -->
-                    <div class="col-md-6">
-                        <label for="correo" class="form-label">Correo Electrónico</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
-                            <input type="email" class="form-control" id="correo" name="correo" required>
-                            <div class="invalid-feedback">Ingrese un correo válido.</div>
-                        </div>
-                    </div>
-
-                    <!-- Contraseña -->
-                    <div class="col-md-6">
-                        <label for="contrasena" class="form-label">Contraseña</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                            <input type="password" class="form-control" id="contrasena" name="contrasena" minlength="6" required>
-                            <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
-                        </div>
-                    </div>
-
-                    <!-- Rol -->
-                    <div class="col-md-6">
-                        <label for="id_rol" class="form-label">Rol de Usuario</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text"><i class="bi bi-person-gear"></i></span>
-                            <select class="form-select" id="id_rol" name="id_rol" required>
-                                <option value="" selected disabled>Seleccione un rol</option>
-                                <option value="1">ADMINISTRADOR</option>
-                                <option value="2">RECEPCIÓN</option>
-                                <option value="3">ENFERMERÍA</option>
-                                <option value="4">LABORATORIO</option>
-                                <option value="5">MÉDICO</option>
-                            </select>
-                            <div class="invalid-feedback">Debe seleccionar un rol.</div>
-                        </div>
-                    </div>
-
-                    <!-- Usuario Activo -->
-                    <div class="col-12 form-check mt-2">
-                        <input class="form-check-input" type="checkbox" id="activo" name="activo" checked>
-                        <label class="form-check-label" for="activo">
-                            <i class="bi bi-check-circle me-1"></i>Usuario Activo
-                        </label>
-                    </div>
+<div class="main-content">
+    <?php include_once("../components/alerta.php");?>
+    <div class="container-fluid mt-5 pt-2">
+        <div class="row justify-content-center">
+            <div class="card shadow rounded-4 p-4">
+                <div class="card-header bg-primary text-white rounded-3 mb-4">
+                    <h4 class="mb-0 d-flex align-items-center">
+                        <i class="bi bi-person-plus-fill me-2 fs-4"></i> Registrar Usuario
+                    </h4>
                 </div>
 
-                <!-- Botones -->
-                <div class="mt-4 d-flex justify-content-end gap-2">
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-check-circle me-1"></i> Registrar Usuario
-                    </button>
-                    <a href="listar_usuarios.php" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left-circle me-1"></i> Cancelar
-                    </a>
+                <div class="card-body">
+                    <form action="../php/insertar_usuarios.php" method="POST" class="needs-validation" novalidate>
+
+                        <div class="row">
+
+                            <!-- Selección de Empleado -->
+                            <div class="mb-4 col-12">
+                                <label for="empleado_id" class="form-label fw-semibold fs-5">
+                                    <i class="bi bi-person-circle me-2 text-primary"></i>Empleado <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select shadow-sm form-select-lg" id="empleado_id" name="empleado_id" required>
+                                    <option selected disabled value="">Selecciona un empleado</option>
+                                    <?php foreach ($empleados as $empleado): ?>
+                                        <option value="<?= htmlspecialchars($empleado['id_empleado']) ?>"
+                                            data-correo="<?= htmlspecialchars($empleado['correo']) ?>"
+                                            data-codigo="<?= htmlspecialchars($empleado['codigo_empleado']) ?>">
+                                            <?= htmlspecialchars($empleado['nombre'] . " " . $empleado['apellido']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Selecciona un empleado válido.
+                                </div>
+                            </div>
+
+                            <!-- Correo (rellenado automático) -->
+                            <div class="mb-4 col-12 col-md-6">
+                                <label for="correo" class="form-label fw-semibold fs-5">
+                                    <i class="bi bi-envelope-fill me-2 text-primary"></i>Correo Electrónico
+                                </label>
+                                <input type="text" class="form-control shadow-sm form-control-lg" name="correo" id="correo" disabled>
+                            </div>
+
+                            <!-- Código Empleado (rellenado automático) -->
+                            <div class="mb-4 col-12 col-md-6">
+                                <label for="codigo_empleado" class="form-label fw-semibold fs-5">
+                                    <i class="bi bi-card-list me-2 text-primary"></i>Código Empleado
+                                </label>
+                                <input type="text" class="form-control shadow-sm form-control-lg" name="codigo_empleado" id="codigo_empleado" disabled>
+                            </div>
+
+                            <!-- Contraseña -->
+                            <div class="mb-4 col-12 col-md-6">
+                                <label for="password" class="form-label fw-semibold fs-5">
+                                    <i class="bi bi-lock-fill me-2 text-primary"></i>Contraseña <span class="text-danger">*</span>
+                                </label>
+                                <input type="password" class="form-control shadow-sm form-control-lg" id="password" name="password" placeholder="Nueva contraseña" required disabled minlength="6">
+                                <div class="invalid-feedback">
+                                    Ingresa una contraseña válida (mínimo 6 caracteres).
+                                </div>
+                            </div>
+
+                            <!-- Repetir Contraseña -->
+                            <div class="mb-4 col-12 col-md-6">
+                                <label for="password_repeat" class="form-label fw-semibold fs-5">
+                                    <i class="bi bi-lock-fill me-2 text-primary"></i>Repetir Contraseña <span class="text-danger">*</span>
+                                </label>
+                                <input type="password" class="form-control shadow-sm form-control-lg" id="password_repeat" name="password_repeat" placeholder="Repite la contraseña" required disabled minlength="6">
+                                <div class="invalid-feedback">
+                                    Repite la contraseña correctamente.
+                                </div>
+                            </div>
+
+                            <!-- Selección de Rol -->
+                            <div class="mb-4 col-12">
+                                <label for="rol" class="form-label fw-semibold fs-5">
+                                    <i class="bi bi-person-badge-fill me-2 text-primary"></i>Rol <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select shadow-sm form-select-lg" id="rol" name="rol" required disabled>
+                                    <option selected disabled value="">Selecciona un rol</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="5">Enfermera</option>
+                                    <option value="2">Médico</option>
+                                    <option value="3">Recepcion</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Selecciona un rol válido.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between flex-column flex-sm-row gap-3">
+                            <a href="listar_usuario.php" class="btn btn-outline-secondary w-100 fs-5 py-2">
+                                <i class="bi bi-arrow-left me-2"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-primary w-100 fs-5 py-2">
+                                <i class="bi bi-person-plus-fill me-2"></i>Registrar Usuario
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
-            </form>
+
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+ 
 <script>
-    // Validación Bootstrap
-    (() => {
-        'use strict'
-        const forms = document.querySelectorAll('.needs-validation')
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', e => {
-                if (!form.checkValidity()) {
-                    e.preventDefault()
-                    e.stopPropagation()
-                }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
+// Activar campos cuando se selecciona un empleado
+document.getElementById('empleado_id').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const correo = selectedOption.getAttribute('data-correo');
+    const codigo = selectedOption.getAttribute('data-codigo');
+
+    // Rellenar los campos de correo y código automáticamente
+    document.getElementById('correo').value = correo;
+    document.getElementById('codigo_empleado').value = codigo;
+
+    // Habilitar los campos de correo y código, que estaban inicialmente deshabilitados
+    document.getElementById('correo').disabled = false;
+    document.getElementById('codigo_empleado').disabled = false;
+
+    // Habilitar los campos de contraseña y rol
+    document.getElementById('password').disabled = false;
+    document.getElementById('password_repeat').disabled = false;
+    document.getElementById('rol').disabled = false;
+});
+
+// Validación Bootstrap
+(() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', e => {
+            if (!form.checkValidity()) {
+                e.preventDefault()
+                e.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+ 
+ 
 </script>
+
+<script src="../assets/js/alerta.js"></script>

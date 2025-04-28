@@ -1,430 +1,132 @@
+/* Card sin bordes, con estilo más minimalista y transiciones suaves */
+.card {
+    border: none; /* Sin bordes */
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: none; /* Sin sombra */
+   /*  transition: all 0.3s ease; */ /* Transición suave */
+    background-color: #fff; /* Fondo blanco */
+    margin-bottom: 10px; /* Espaciado entre las cards */
+}
+
  
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f6fa;
-            margin: 0;
-            padding: 20px;
-       
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      color: #333;
+/* Asegurar que las tarjetas ocupen el 100% del ancho */
+.card-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 15px;
+}
+
+/* Cabecera de la tarjeta con estilo sticky */
+.card-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Ajuste de los iconos y texto en dispositivos móviles */
+@media (max-width: 768px) {
+    .table {
+        display: block;
+        width: 100%;
     }
 
-    .contenedor {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 20px;
+    .table thead {
+        display: none; /* Ocultamos encabezados en móviles */
+    
     }
 
-    /* Encabezado */
-    .titulo-barra {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #00a8ff;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .table tbody {
+        display: block;
+        width: 100%;
     }
 
-    .titulo-barra h2 {
-      margin: 0;
+    .table tbody tr {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .btn-nuevo {
-      padding: 10px 20px;
-      background: #44bd32;
-      color: white;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
+    .table tbody tr td {
+        display: flex;
+        justify-content: flex-start; /* Alineación a la izquierda */
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #080606;
+        font-size: 0.95rem;
     }
 
-    .btn-nuevo:hover {
-      background: #4cd137;
+    .table tbody tr td:last-child {
+        border-bottom: none;
     }
 
-    /* Filtro de Búsqueda */
-    .filtro {
-      margin: 25px 0;
-      text-align: center;
+    .table tbody tr td::before {
+        content: attr(data-label);
+        flex: 0 0 30%; /* Reducimos el espacio del título */
+        font-weight: 600;
+        color: #555;
+        text-align: left;
+        padding-right: 20px; /* Menos espacio entre el icono y el texto */
+        font-size: 1rem;
     }
 
-    .filtro input {
-      width: 50%;
-      padding: 12px;
-      font-size: 18px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      outline: none;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: 0.3s;
+    .table tbody tr td span, 
+    .table tbody tr td a {
+        flex: 1;
+        text-align: left; /* Alineamos el contenido a la izquierda */
+        font-size: 1rem; /* Mejor legibilidad */
     }
 
-    .filtro input:focus {
-      border-color: #00a8ff;
+    /* Para los iconos en data-label, cambiamos el tamaño */
+    .table tbody tr td::before {
+        font-size: 1.1rem; /* Mayor tamaño de los iconos */
+        margin-right: 10px; /* Separar más los iconos del texto */
     }
-
-    /* Tabla de Pacientes */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 25px;
-      background-color: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    /* Ajuste en el diseño de los enlaces */
+    .table tbody tr td a {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
     }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px 15px;
-      text-align: left;
+    /* Estilo para los iconos tipo figura */
+    .table tbody tr td::before {
+        font-size: 1.5rem;  /* Ajustar tamaño de los iconos */
+        margin-right: 8px;  /* Espacio entre el icono y el texto */
     }
-
-    th {
-      background-color: #00a8ff;
-      color: white;
-      font-size: 16px;
+    
+    /* Para las acciones de edición */
+    .table tbody tr td a {
+        font-size: 1.2rem; /* Ajustar tamaño del icono de la acción */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 8px;
     }
+}
 
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
+/* Por defecto, ocultamos los data-label */
+.table tbody tr td::before {
+    display: none;
+}
+
+/* En dispositivos móviles, mostramos los data-label */
+@media (max-width: 768px) {
+    .table tbody tr td::before {
+        display: block; /* Mostramos el data-label como bloque */
+        content: attr(data-label); /* Extraemos el contenido del data-label */
+        font-weight: bold; /* Hacemos que los labels sean más visibles */
+        margin-bottom: 5px; /* Espaciamos un poco */
+        font-size: 1rem; /* Ajustamos el tamaño de fuente */
     }
+}
 
-    tr:hover {
-      background-color: #f1f1f1;
-    }
-
-    /* Botones de Acción */
-    .acciones-btn {
-      display: flex;
-      gap: 6px;
-    }
-
-    .btn-editar {
-      background-color: #00a8ff;
-      color: white;
-      padding: 5px 12px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s;
-    }
-
-    .btn-editar:hover {
-      background-color: #0097e6;
-    }
-
-    /* Paginación */
-    .paginacion {
-      display: flex;
-      justify-content: center;
-      margin-top: 25px;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .paginacion a {
-      background: #dcdde1;
-      padding: 8px 14px;
-      border-radius: 6px;
-      text-decoration: none;
-      color: #2f3640;
-      font-size: 14px;
-      transition: background 0.3s;
-    }
-
-    .paginacion a:hover {
-      background: #00a8ff;
-      color: white;
-    }
-
-    .paginacion a.activa {
-      background: #00a8ff;
-      color: white;
-      font-weight: bold;
-    }
-
-        .contenedor {
-            max-width: 1200px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .titulo-barra {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .titulo-barra h2 {
-            font-size: 24px;
-            color: #2f3640;
-        }
-
-        .btn-nuevo {
-            background: #44bd32;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            font-size: 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .btn-nuevo:hover {
-            background: #4cd137;
-        }
-
-        .filtro input {
-            width: 100%;
-            max-width: 400px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid #dcdde1;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        thead {
-            background: #00a8ff;
-            color: white;
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid #f1f2f6;
-        }
-
-        tbody tr:hover {
-            background: #f0f9ff;
-        }
-
-        th i {
-            margin-right: 6px;
-        }
-
-        @media (max-width: 768px) {
-
-            table,
-            thead,
-            tbody,
-            th,
-            td,
-            tr {
-                display: block;
-            }
-
-            thead {
-                display: none;
-            }
-
-            tbody tr {
-                margin-bottom: 15px;
-                background: #fefefe;
-                border: 1px solid #dcdde1;
-                border-radius: 10px;
-                padding: 10px;
-            }
-
-            tbody td {
-                padding: 8px 10px;
-                position: relative;
-            }
-
-            tbody td::before {
-                content: attr(data-label);
-                font-weight: bold;
-                display: block;
-                color: #2f3640;
-                margin-bottom: 4px;
-            }
-        }
-
-        .acciones-btn {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-editar {
-            background-color: #40739e;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-editar:hover {
-            background-color: #487eb0;
-        }
-
-        /* Adaptamos los botones a móviles también */
-        @media (max-width: 768px) {
-            .acciones-btn {
-                justify-content: center;
-            }
-
-            .btn-editar {
-                width: 100%;
-                margin-top: 8px;
-            }
-        }
-
-        .paginacion {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .paginacion a {
-            background: #dcdde1;
-            padding: 8px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #2f3640;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .paginacion a:hover {
-            background: #00a8ff;
-            color: white;
-        }
-
-        .paginacion a.activa {
-            background: #00a8ff;
-            color: white;
-            font-weight: bold;
-        }
-
-        .contenedor {
-            max-width: 1300px;
-            margin: auto;
-            padding: 30px;
-        }
-
-        .titulo-barra {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-nuevo {
-            padding: 10px 20px;
-            background: #44bd32;
-            color: white;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-nuevo:hover {
-            background: #4cd137;
-        }
-
-        .filtro {
-            margin: 25px 0;
-        }
-
-        .filtro input {
-            width: 100%;
-            padding: 12px;
-            font-size: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f5f6fa;
-        }
-
-        .acciones-btn {
-            display: flex;
-            gap: 6px;
-        }
-
-        .btn-editar {
-            background-color: #00a8ff;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-editar:hover {
-            background-color: #0097e6;
-        }
-
-        .paginacion {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .paginacion a {
-            background: #dcdde1;
-            padding: 8px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #2f3640;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .paginacion a:hover {
-            background: #00a8ff;
-            color: white;
-        }
-
-        .paginacion a.activa {
-            background: #00a8ff;
-            color: white;
-            font-weight: bold;
-        }
-   

@@ -64,16 +64,18 @@ if ($id_usuario > 0) {
 
   <!-- Icono -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
+<!-- 
   <link rel="icon" href="https://tusitio.com/assets/img/favicon.png" type="image/png">
-
+ -->
   <!-- Estilos y fuentes -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/admin.css">
   <link rel="stylesheet" href="../assets/css/alerta.css">
   <link rel="stylesheet" href="../assets/css/tabla.css">
-  <script src="../assets/js/alerta.js" defer></script>
+  <link rel="stylesheet" href="../assets/css/formulario.css">
+
 
 <!-- Jquery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
