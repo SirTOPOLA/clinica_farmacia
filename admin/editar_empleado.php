@@ -13,8 +13,8 @@ if (isset($_GET['id'])) {
 
     if (!$empleado) {
         // Si no existe el empleado, redirigir
-        header("Location: listar_empleado.php");
-        exit;
+       // header("Location: listar_empleado.php");
+       // exit;
     }
 } else {
     header("Location: listar_empleado.php");
