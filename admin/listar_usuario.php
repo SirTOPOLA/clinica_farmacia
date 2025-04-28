@@ -7,11 +7,20 @@ include_once("../includes/sidebar.php");
 <div class="main-content">
   <div class="conten-wrapper">
     <div class="card shadow-lg mt-4 border-0">
-      <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white rounded-top">
-        <h2 class="mb-0"><span class="material-icons">admin_panel_settings</span> Gestión de Usuarios</h2>
-        <button class="btn btn-primary text-white shadow-sm rounded-3" onclick="window.location='registrar_usuario.php'">
-          <span class="material-icons">add</span>  
-        </button>
+    <div class="card-header">
+        <div class="d-flex flex-sm-row justify-content-between align-items-center bg-primary text-white p-4 rounded-top">
+          <h2 class="mb-0"><span class="material-icons">group</span> Gestión de Empleados</h2>
+          <button class="btn btn-primary text-white shadow-sm rounded-3 p-2"
+            onclick="window.location='registrar_usuario.php'">
+            <span class="material-icons"> add</span>Registrar
+          </button>
+        </div>
+        <div class="d-flex justify-content-center pt-4">
+          <div class="col-12 col-md-6">
+            <input type="text" id="buscar" class="form-control shadow-sm form-control-lg"
+              placeholder="🔍 Buscar por nombre, código, correo..." contenteditable="true">
+          </div> 
+        </div>
       </div>
 
      <!-- para las alertas -->
@@ -19,15 +28,9 @@ include_once("../includes/sidebar.php");
         <?php include_once("../components/alerta.php"); ?>
       </div>
 
-      <div class="card-body bg-light">
-        <div class="row mb-3 justify-content-center">
-          <div class="col-md-6">
-            <div class="input-group">
-              <input type="text" id="buscar" class="form-control shadow-sm rounded" placeholder="🔍 Buscar por correo, código o rol..."
-                oninput="buscarUsuarios()">
-            </div>
-          </div>
-        </div>
+      
+          
+       
 
         <div id="tabla-usuarios" class="table-responsive">
           <table class="table table-striped table-hover shadow-sm rounded">
