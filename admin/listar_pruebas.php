@@ -7,9 +7,13 @@ include_once("../includes/sidebar.php");
   <div class="conten-wrapper">
     <div class="card shadow-lg mt-4 border-0">
       <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white rounded-top">
-        <h2 class="mb-0"><span class="material-icons">notifications</span> Notificaciones</h2>
+        <h2 class="mb-0"><span class="material-icons">science</span> Pruebas Médicas</h2>
+        <button class="btn btn-primary text-white shadow-sm rounded-3" onclick="window.location='registrar_prueba.php'">
+          <span class="material-icons">add</span>  
+        </button>
       </div>
-      <div id="alert-container" class="mb-3">
+ <!-- para las alertas -->
+ <div id="alert-container" class="mb-3">
         <?php include_once("../includes/sidebar.php"); ?>
       </div>
       <div class="card-body bg-light">
@@ -17,19 +21,18 @@ include_once("../includes/sidebar.php");
           <div class="col-md-6">
             <div class="input-group">
               <input type="text" id="buscar" class="form-control shadow-sm rounded"
-                     placeholder="🔍 Buscar por mensaje o tipo..." oninput="buscarNotificaciones()">
+                     placeholder="🔍 Buscar prueba médica..." oninput="buscarPruebas()">
             </div>
           </div>
         </div>
 
-        <div id="tabla-notificaciones" class="table-responsive">
+        <div id="tabla-pruebas" class="table-responsive">
           <table class="table table-striped table-hover shadow-sm rounded">
-            <thead class="bg-secondary text-white">
+            <thead class="bg-dark text-white">
               <tr>
-                <th><span class="material-icons">message</span> Mensaje</th>
-                <th><span class="material-icons">date_range</span> Fecha de Creación</th>
-                <th><span class="material-icons">notifications_active</span> Tipo</th>
-                <th><span class="material-icons">check_circle</span> Leído</th>
+                <th><span class="material-icons">label</span> Nombre</th>
+                <th><span class="material-icons">payments</span> Precio (S/)</th>
+                <th><span class="material-icons">settings</span> Acciones</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -42,6 +45,5 @@ include_once("../includes/sidebar.php");
   </div>
 </div>
  
-
 </body>
 </html>

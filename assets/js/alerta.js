@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => alerta.remove(), 300);
       });
   
-      // Auto ocultar tras 6 segundos
+      // Auto ocultar tras 9 segundos
       setTimeout(() => {
         alerta.style.opacity = 0;
         setTimeout(() => alerta.remove(), 300);
-      }, 6000);
+      }, 9000);
     }
   });
   

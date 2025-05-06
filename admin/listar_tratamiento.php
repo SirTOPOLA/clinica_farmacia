@@ -1,60 +1,55 @@
-<?php 
+<?php
 include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
 ?>
-  <!-- Main Content -->
-  <div class="main-content">
-     
- <!-- Sección de Tratamientos -->
-<div id="tratamientos" class="card p-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0">Lista de Tratamientos</h4>
-    <a href="registrar_tratamiento.php" class="btn btn-primary">
-      <i class="bi bi-plus-circle-fill me-1"></i> Registrar Tratamiento
-    </a>
-  </div>
-  <table class="table table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>#</th>
-        <th>Paciente</th>
-        <th>Médico</th>
-        <th>Descripción</th>
-        <th>Inicio</th>
-        <th>Fin</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Juan Pérez</td>
-        <td>Dra. Ana Ruiz</td>
-        <td>Tratamiento antibiótico por infección urinaria</td>
-        <td>2025-04-20</td>
-        <td>2025-04-27</td>
-        <td>
-          <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-          <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-        </td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>María López</td>
-        <td>Dr. Luis Méndez</td>
-        <td>Terapia respiratoria post-COVID</td>
-        <td>2025-04-22</td>
-        <td>2025-05-06</td>
-        <td>
-          <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-          <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 
+<div class="main-content">
+  <div class="conten-wrapper">
+    <div class="card shadow-lg mt-4 border-0">
+      <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white rounded-top">
+        <h2 class="mb-0"><span class="material-icons">healing</span> Gestión de Tratamientos</h2>
+        <button class="btn btn-primary text-white shadow-sm rounded-3" onclick="window.location='registrar_tratamiento.php'">
+          <span class="material-icons">add</span>  
+        </button>
+      </div>
+
+   <!-- para las alertas -->
+   <div id="alert-container" class="mb-3">
+        <?php include_once("../includes/sidebar.php"); ?>
+      </div>
+
+      <div class="card-body bg-light">
+        <div class="row mb-3 justify-content-center">
+          <div class="col-md-6">
+            <div class="input-group">
+              <input type="text" id="buscar" class="form-control shadow-sm rounded" placeholder="🔍 Buscar por paciente, empleado o descripción..."
+                oninput="buscarTratamientos()">
+            </div>
+          </div>
+        </div>
+
+        <div id="tabla-tratamientos" class="table-responsive">
+          <table class="table table-striped table-hover shadow-sm rounded">
+            <thead class="bg-secondary text-white">
+              <tr>
+                <th><span class="material-icons">person</span> Paciente</th>
+                <th><span class="material-icons">badge</span> Empleado</th>
+                <th><span class="material-icons">event</span> Inicio</th>
+                <th><span class="material-icons">event_available</span> Fin</th>
+                <th><span class="material-icons">info</span> Descripción</th>
+                <th><span class="material-icons">comment</span> Observaciones</th>
+                <th><span class="material-icons">settings</span> Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div id="paginacion" class="d-flex justify-content-center"></div>
+      </div>
+    </div>
+  </div>
 </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ 
 </body>
 </html>

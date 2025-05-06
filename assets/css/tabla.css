@@ -1,0 +1,132 @@
+/* Card sin bordes, con estilo más minimalista y transiciones suaves */
+.card {
+    border: none; /* Sin bordes */
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: none; /* Sin sombra */
+   /*  transition: all 0.3s ease; */ /* Transición suave */
+    background-color: #fff; /* Fondo blanco */
+    margin-bottom: 10px; /* Espaciado entre las cards */
+}
+
+ 
+/* Asegurar que las tarjetas ocupen el 100% del ancho */
+.card-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 15px;
+}
+
+/* Cabecera de la tarjeta con estilo sticky */
+.card-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Ajuste de los iconos y texto en dispositivos móviles */
+@media (max-width: 768px) {
+    .table {
+        display: block;
+        width: 100%;
+    }
+
+    .table thead {
+        display: none; /* Ocultamos encabezados en móviles */
+    
+    }
+
+    .table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .table tbody tr {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .table tbody tr td {
+        display: flex;
+        justify-content: flex-start; /* Alineación a la izquierda */
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #080606;
+        font-size: 0.95rem;
+    }
+
+    .table tbody tr td:last-child {
+        border-bottom: none;
+    }
+
+    .table tbody tr td::before {
+        content: attr(data-label);
+        flex: 0 0 30%; /* Reducimos el espacio del título */
+        font-weight: 600;
+        color: #555;
+        text-align: left;
+        padding-right: 20px; /* Menos espacio entre el icono y el texto */
+        font-size: 1rem;
+    }
+
+    .table tbody tr td span, 
+    .table tbody tr td a {
+        flex: 1;
+        text-align: left; /* Alineamos el contenido a la izquierda */
+        font-size: 1rem; /* Mejor legibilidad */
+    }
+
+    /* Para los iconos en data-label, cambiamos el tamaño */
+    .table tbody tr td::before {
+        font-size: 1.1rem; /* Mayor tamaño de los iconos */
+        margin-right: 10px; /* Separar más los iconos del texto */
+    }
+    
+    /* Ajuste en el diseño de los enlaces */
+    .table tbody tr td a {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
+    }
+    /* Estilo para los iconos tipo figura */
+    .table tbody tr td::before {
+        font-size: 1.5rem;  /* Ajustar tamaño de los iconos */
+        margin-right: 8px;  /* Espacio entre el icono y el texto */
+    }
+    
+    /* Para las acciones de edición */
+    .table tbody tr td a {
+        font-size: 1.2rem; /* Ajustar tamaño del icono de la acción */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 8px;
+    }
+}
+
+/* Por defecto, ocultamos los data-label */
+.table tbody tr td::before {
+    display: none;
+}
+
+/* En dispositivos móviles, mostramos los data-label */
+@media (max-width: 768px) {
+    .table tbody tr td::before {
+        display: block; /* Mostramos el data-label como bloque */
+        content: attr(data-label); /* Extraemos el contenido del data-label */
+        font-weight: bold; /* Hacemos que los labels sean más visibles */
+        margin-bottom: 5px; /* Espaciamos un poco */
+        font-size: 1rem; /* Ajustamos el tamaño de fuente */
+    }
+}
+

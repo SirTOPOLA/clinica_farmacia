@@ -1,39 +1,68 @@
+/* ========== ALERTA FLOTANTE ========== */
 .alerta-flotante {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 9999;
-    padding: 1rem 1.25rem;
-    border: 1px solid transparent;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    animation: slideIn 0.4s ease-out;
-    max-width: 90vw;
-    width: fit-content;
-    min-width: 280px;
-    font-size: 0.95rem;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  padding: 1rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  color: #1e293b;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  width: fit-content;
+  min-width: 280px;
+  max-width: 90vw;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Botón de cerrar accesible */
+.alerta-flotante .btn-cerrar {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.25rem;
+  margin-left: auto;
+  cursor: pointer;
+
+  transition: color 0.2s ease-in-out;
+}
+.alerta-flotante .btn-cerrar:hover,
+.alerta-flotante .btn-cerrar:focus {
+  color: #ef4444;
+  outline: none;
+}
+
+/* Animación entrada */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
   }
-  
-  .alerta-flotante .btn-cerrar {
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: 1.25rem;
-    margin-left: auto;
-    cursor: pointer;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
-  
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-20px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+}
+
+/* RESPONSIVE: Adaptar en pantallas muy pequeñas */
+@media (max-width: 400px) {
+  .alerta-flotante {
+    right: 0.5rem;
+    left: 0.5rem;
+    max-width: 95vw;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
   }
-  
+}
