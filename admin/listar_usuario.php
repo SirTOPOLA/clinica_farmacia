@@ -101,3 +101,6 @@ function editarUsuario(idUsuario) {
     window.location.href = 'editar_usuario.php?id_usuario=' + idUsuario;
 }
 </script>
+
+
+
