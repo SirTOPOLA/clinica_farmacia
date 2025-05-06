@@ -82,12 +82,12 @@ try {
 
     $_SESSION['mensaje'] = "Paciente registrado exitosamente. Código asignado: $codigo";
     $_SESSION['tipo'] = "success";
-    header("Location: ../admin/listar_usuario.php");
+    header("Location: ../admin/listar_paciente.php");
     exit;
 
 } catch (PDOException $e) {
     $_SESSION['mensaje'] = "Error al registrar paciente: " . $e->getMessage();
     $_SESSION['tipo'] = "error";
-    header("Location: ../admin/listar_usuario.php");
+    header("Location: ../admin/listar_paciente.php");
     exit;
 }

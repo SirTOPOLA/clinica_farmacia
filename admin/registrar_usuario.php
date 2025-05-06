@@ -2,6 +2,7 @@
 include_once("../includes/header.php");
 include_once("../includes/sidebar.php"); 
 
+
 // Cargar empleados activos
 try {
     $stmt = $conexion->prepare("SELECT * FROM empleados ");

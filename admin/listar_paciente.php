@@ -1,6 +1,10 @@
 <?php
 include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
+
+require_once("../config/conexion.php");
+$stmt = $conexion->query("SELECT * FROM pacientes");
+$pacientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Main Content -->
@@ -15,8 +19,8 @@ include_once("../includes/sidebar.php");
       </div>
 
       <!-- para las elertas -->
-   <!-- para las alertas -->
-   <div id="alert-container" class="mb-3">
+      <!-- para las alertas -->
+      <div id="alert-container" class="mb-3">
         <?php include_once("../includes/sidebar.php"); ?>
       </div>
 
@@ -35,6 +39,7 @@ include_once("../includes/sidebar.php");
           <table class="table table-striped table-hover shadow-sm rounded">
             <thead class="bg-secondary text-white">
               <tr>
+              <th><span class="material-icons"></span> Id</th>
                 <th><span class="material-icons">fingerprint</span> Código</th>
                 <th><span class="material-icons">person</span> Nombre</th>
                 <th><span class="material-icons">cake</span> Nacimiento</th>
@@ -47,7 +52,23 @@ include_once("../includes/sidebar.php");
               </tr>
             </thead>
             <tbody>
-
+              <?php foreach ($pacientes as $paciente): ?>
+                <tr>
+                <td><?= htmlspecialchars($paciente['id_paciente']) ?></td>
+                  <td><?= htmlspecialchars($paciente['codigo']) ?></td>
+                  <td><?= htmlspecialchars($paciente['nombre'] . ' ' . $paciente['apellido']) ?></td>
+                  <td><?= htmlspecialchars($paciente['fecha_nacimiento']) ?></td>
+                  <td><?= htmlspecialchars($paciente['genero']) ?></td>
+                  <td><?= htmlspecialchars($paciente['telefono']) ?></td>
+                  <td><?= htmlspecialchars($paciente['correo']) ?></td>
+                  <td><?= htmlspecialchars($paciente['direccion']) ?></td>
+                  <td><?= htmlspecialchars($paciente['fecha_registro']) ?></td>
+                  <td>
+                    <button class="btn btn-sm btn-primary">Editar</button>
+                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>
@@ -61,7 +82,8 @@ include_once("../includes/sidebar.php");
   </div>
 </div>
 
- 
+
 
 </body>
+
 </html>

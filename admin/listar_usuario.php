@@ -54,32 +54,7 @@ include_once("../includes/sidebar.php");
   </div>
 </div>
 
-<<<<<<< HEAD
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-function confirmarDesactivar(idUsuario) {
-    if (confirm("¿Estás seguro de que deseas desactivar este usuario?")) {
-        window.location.href = '../php/desactivar_usuario.php?id_usuario=' + idUsuario;
-    }
-}
-
-function confirmarActivar(idUsuario) {
-    if (confirm("¿Estás seguro de que deseas activar este usuario?")) {
-        window.location.href = '../php/activar_usuario.php?id_usuario=' + idUsuario;
-    }
-}
-
-function editarUsuario(idUsuario) {
-    window.location.href = 'editar_usuario.php?id_usuario=' + idUsuario;
-}
-</script>
-
-
-
-=======
  <script src="../assets/js/usuarios.js"></script>
  <script src="../assets/js/alerta.js"></script>
 </body>
 </html>
->>>>>>> e6c151e7d07453c770ab3d5f051babbc08b02800
