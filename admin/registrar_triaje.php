@@ -14,37 +14,27 @@ include_once("../includes/sidebar.php");
     </div>
 
     <div class="card-body">
+      <!-- Buscador de pacientes -->
       <div class="mb-4">
         <label for="filtroInput" class="form-label"><i class="bi bi-search me-2"></i>Buscar Paciente</label>
         <input type="text" class="form-control" id="filtroInput" placeholder="Buscar por nombre o código">
       </div>
 
-      <form action="#" method="POST" class="needs-validation" novalidate>
+      <!-- Resultados con radio buttons -->
+      <div class="mt-3">
+        <ul id="listaResultados" class="list-group"></ul>
+      </div>
+
+      <!-- Formulario principal -->
+      <form action="../php/insertar_triaje.php" method="POST" class="needs-validation mt-4" novalidate>
+        <input type="hidden" id="id_paciente" name="id_paciente">
+        <div class="mb-3">
+          <label for="nombre_paciente" class="form-label">Paciente</label>
+          <input type="text" class="form-control" id="nombre_paciente" placeholder="Seleccione un paciente..." readonly required>
+          <div class="invalid-feedback">Seleccione un paciente.</div>
+        </div>
+
         <div class="row g-4">
-          <div class="col-md-6">
-            <label for="id_paciente" class="form-label">Paciente</label>
-            <div class="input-group has-validation">
-              <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-              <select class="form-select" id="id_paciente" name="id_paciente" required>
-                <option selected disabled>Seleccione un paciente</option>
-              </select>
-              <div class="invalid-feedback">Seleccione un paciente.</div>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <label for="id_usuario" class="form-label">Usuario</label>
-            <div class="input-group has-validation">
-              <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
-              <select class="form-select" id="id_usuario" name="id_usuario" required>
-                <option selected disabled value="">Seleccione un usuario</option>
-                <option value="1">Enfermera 1</option>
-                <option value="2">Doctor A</option>
-              </select>
-              <div class="invalid-feedback">Seleccione un usuario.</div>
-            </div>
-          </div>
-
           <div class="col-md-6">
             <label for="fecha" class="form-label">Fecha</label>
             <div class="input-group has-validation">
@@ -86,6 +76,20 @@ include_once("../includes/sidebar.php");
             <input type="text" class="form-control" id="presion_arterial" name="presion_arterial" required>
             <div class="invalid-feedback">Ingrese la presión arterial.</div>
           </div>
+
+          <!-- Campo de precio -->
+          <div class="col-6 col-md-3">
+            <label for="precio" class="form-label">Precio</label>
+            <input type="number" step="0.01" class="form-control" id="precio" min="500" name="precio" required>
+            <div class="invalid-feedback">Ingrese el precio.</div>
+          </div>
+        </div>
+
+        <!-- Nuevo campo de texto para el motivo de la consulta -->
+        <div class="mb-3">
+          <label for="motivo_consulta" class="form-label">Motivo de la Consulta</label>
+          <textarea class="form-control" id="motivo_consulta" name="motivo_consulta" rows="4" required></textarea>
+          <div class="invalid-feedback">Ingrese el motivo de la consulta.</div>
         </div>
 
         <div class="mt-4 d-flex justify-content-end gap-2">
@@ -97,18 +101,14 @@ include_once("../includes/sidebar.php");
           </a>
         </div>
       </form>
-
-      <!-- Resultados del buscador -->
-      <div class="mt-5">
-        <h5 class="mb-3"><i class="bi bi-list-ul me-2"></i>Resultados</h5>
-        <ul id="listaResultados" class="list-group"></ul>
-      </div>
     </div>
   </div>
 </div>
 
-<!-- Scripts -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Validaciones y búsqueda -->
 <script>
 (() => {
   'use strict';
@@ -125,8 +125,9 @@ include_once("../includes/sidebar.php");
 })();
 
 const filtroInput = document.getElementById('filtroInput');
-const pacienteSelect = document.getElementById('id_paciente');
 const listaResultados = document.getElementById('listaResultados');
+const inputIdPaciente = document.getElementById('id_paciente');
+const inputNombrePaciente = document.getElementById('nombre_paciente');
 
 filtroInput.addEventListener('input', function () {
   const query = this.value.trim();
@@ -135,24 +136,42 @@ filtroInput.addEventListener('input', function () {
     return;
   }
 
-  fetch(`../php/buscar_paciente.php?q=${encodeURIComponent(query)}`)
+  fetch(`../php/buscar_paciente2.php?q=${encodeURIComponent(query)}`)
     .then(response => response.json())
     .then(data => {
-      pacienteSelect.innerHTML = '<option disabled selected>Seleccione un paciente</option>';
       listaResultados.innerHTML = '';
 
-      data.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.id_paciente;
-        opt.textContent = p.display;
-        pacienteSelect.appendChild(opt);
+      if (data.length === 0) {
+        listaResultados.innerHTML = '<li class="list-group-item">No se encontraron resultados</li>';
+        return;
+      }
 
+      data.forEach(p => {
         const li = document.createElement('li');
-        li.className = 'list-group-item';
-        li.textContent = p.display;
+        li.className = 'list-group-item d-flex align-items-center';
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'seleccion_paciente';
+        radio.value = p.id_paciente;
+        radio.classList.add('form-check-input', 'me-2');
+
+        radio.addEventListener('change', () => {
+          inputIdPaciente.value = p.id_paciente;
+          inputNombrePaciente.value = p.display;
+          listaResultados.innerHTML = '';
+        });
+
+        li.appendChild(radio);
+        li.appendChild(document.createTextNode(p.display));
         listaResultados.appendChild(li);
       });
     })
-    .catch(error => console.error('Error al buscar pacientes:', error));
+    .catch(error => {
+      console.error('Error al buscar pacientes:', error);
+    });
 });
 </script>
+
+</body>
+</html>
