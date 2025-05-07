@@ -1,6 +1,6 @@
 <?php
 include_once("../includes/header.php");
- include_once("../includes/sidebar.php");
+include_once("../includes/sidebar.php");
 
 
 
@@ -116,6 +116,19 @@ $registros_triaje = $stmt_triaje->fetchAll(PDO::FETCH_ASSOC);
                         <span class="material-icons">science</span> Pruebas Médicas
                       </a>
                     <?php endif; ?>
+
+                    <?php if ($rol_usuario == 'ADMINISTRADOR' || $rol_usuario == 'MEDICO'): ?>
+                      <button class="btn btn-info btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReceta"
+                        data-id-paciente="<?= $triaje['id_paciente'] ?>"
+                        data-nombre-paciente="<?= htmlspecialchars($triaje['paciente']) ?>">
+                        <span class="material-icons">receipt_long</span> Receta
+                      </button>
+                    <?php endif; ?>
+
+
+
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -129,6 +142,56 @@ $registros_triaje = $stmt_triaje->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </div>
 
+
+
+<div class="modal fade" id="modalReceta" tabindex="-1" aria-labelledby="modalRecetaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <div class="modal-header bg-info text-white rounded-top">
+        <h5 class="modal-title" id="modalRecetaLabel"><span class="material-icons">medication</span> Crear Receta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form action="../php/insertar_receta.php" method="POST">
+        <div class="modal-body bg-light">
+          <input type="hidden" name="id_paciente" id="modal-id-paciente">
+          <input type="hidden" name="id_empleado" id="modal-id-empleado">
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Nombre del Paciente:</label>
+            <input type="text" id="modal-nombre-paciente" class="form-control" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Fecha:</label>
+            <input type="text" class="form-control" name="fecha" value="<?= date('Y-m-d') ?>" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Medicamento:</label>
+            <textarea class="form-control" name="medicamento" rows="2" required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Instrucciones:</label>
+            <textarea class="form-control" name="instrucciones" rows="3" required>M                T                 N</textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Duración (días):</label>
+            <input type="number" min="1" class="form-control" name="duracion" required>
+          </div>
+        </div>
+        <div class="modal-footer bg-light rounded-bottom">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-info text-white">Guardar Receta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
 <script>
   // Lógica de temporizador para eliminar las alertas después de 10 segundos
   setTimeout(() => {
@@ -141,6 +204,31 @@ $registros_triaje = $stmt_triaje->fetchAll(PDO::FETCH_ASSOC);
     }
   }, 10000); // 10 segundos
 </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const modalReceta = document.getElementById('modalReceta');
+    modalReceta.addEventListener('show.bs.modal', event => {
+      const button = event.relatedTarget;
+      const idPaciente = button.getAttribute('data-id-paciente');
+      const nombrePaciente = button.getAttribute('data-nombre-paciente');
+
+      document.getElementById('modal-id-paciente').value = idPaciente;
+      document.getElementById('modal-nombre-paciente').value = nombrePaciente;
+
+      fetch('obtener_empleado.php')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('modal-id-empleado').value = data.id_empleado;
+        });
+    });
+  });
+</script>
+
+
+<!-- Bootstrap 5.3 JS y Popper -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 
 </body>
 
