@@ -46,15 +46,7 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
           <?php endif; ?>
         </div>
 
-        <div class="row mb-3 justify-content-center">
-          <div class="col-md-6">
-            <div class="input-group">
-              <input type="text" id="buscar" class="form-control shadow-sm rounded"
-                placeholder="🔍 Buscar por paciente, tipo de estudio..."
-                oninput="buscarLaboratorio()">
-            </div>
-          </div>
-        </div>
+      
 
         <div class="row mb-3 justify-content-center">
           <div class="col-md-6">

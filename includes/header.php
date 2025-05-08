@@ -65,6 +65,8 @@ if ($id_usuario > 0) {
   <!-- Icono -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <!-- 
   <link rel="icon" href="https://tusitio.com/assets/img/favicon.png" type="image/png">
  -->
