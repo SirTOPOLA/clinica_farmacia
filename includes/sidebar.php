@@ -47,9 +47,9 @@ $menu = [
     'Clínica' => [
         ['listar_paciente.php', 'bi bi-people', 'Pacientes', ['recepcion', 'administrador']],
         ['listar_cita.php', 'bi bi-calendar-event', 'Citas', ['recepcion', 'medico', 'administrador']],
-        ['listar_triaje.php', 'bi bi-heart-pulse', 'Triaje', ['enfermeria', 'administrador']],
-        ['listar_tratamiento.php', 'bi bi-clipboard2-pulse', 'Tratamiento', ['enfermeria', 'administrador']],
-        ['listar_pruebas.php', 'bi bi-file-earmark-medical', 'Pruebas médicas', ['medico', 'administrador']],
+        ['listar_triaje.php', 'bi bi-heart-pulse', 'Triaje', ['enfermeria', 'medico', 'administrador']],
+        ['listar_tratamiento.php', 'bi bi-clipboard2-pulse', 'Tratamiento', ['enfermeria', 'medico', 'administrador']],
+        ['listar_pruebas.php', 'bi bi-file-earmark-medical', 'Pruebas médicas', ['administrador']],
         ['listar_laboratorio.php', 'bi bi-beaker', 'Laboratorio', ['laboratorio', 'medico', 'administrador']],
         ['listar_receta.php', 'bi bi-prescription', 'Recetas', ['medico', 'administrador']],
     ],

@@ -46,8 +46,6 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
           <?php endif; ?>
         </div>
 
-      
-
         <div class="row mb-3 justify-content-center">
           <div class="col-md-6">
             <div class="input-group">
@@ -77,13 +75,13 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
                 <th>Acciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="tabla-datos">
               <?php
               $sql = "SELECT l.*, p.nombre AS paciente_nombre, p.codigo, pr.nombre AS prueba_nombre, pr.precio
-        FROM laboratorio l
-        JOIN pacientes p ON l.id_paciente = p.id_paciente
-        JOIN pruebas_medicas pr ON l.tipo_prueba = pr.id_prueba
-        ORDER BY l.fecha DESC";
+                      FROM laboratorio l
+                      JOIN pacientes p ON l.id_paciente = p.id_paciente
+                      JOIN pruebas_medicas pr ON l.tipo_prueba = pr.id_prueba
+                      ORDER BY l.fecha DESC";
               $stmt = $conexion->query($sql);
               while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $observaciones = htmlspecialchars(strlen($fila['observaciones']) > 50 ? substr($fila['observaciones'], 0, 50) . '...' : $fila['observaciones']);
@@ -92,7 +90,7 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
 
                 $eliminar_button = ($rol_usuario == 'ADMINISTRADOR') ? "<a href='eliminar_laboratorio.php?id=" . $fila['id_resultado'] . "' class='btn btn-sm btn-danger'><i class='material-icons'>delete</i></a>" : "";
                 $pagar_button = ($rol_usuario == 'ADMINISTRADOR') ? "<button class='btn btn-sm btn-info text-white' onclick='abrirModalPago(" . json_encode($fila) . ")'><i class='material-icons'>attach_money</i></button>" : "";
-                $imprimir_button = ($rol_usuario == 'ADMINISTRADOR') ? "<a href='imprimir_resultado.php?id=" . $fila['id_resultado'] . "' class='btn btn-sm btn-success'><i class='material-icons'>print</i></a>" : "";
+                $imprimir_button = ($rol_usuario == 'ADMINISTRADOR' || $rol_usuario == 'MEDICO') ? "<a href='imprimir_resultado.php?id=" . $fila['id_resultado'] . "' class='btn btn-sm btn-success'><i class='material-icons'>print</i></a>" : "";
 
                 echo "<tr>";
                 echo "<td>" . htmlspecialchars($fila['codigo']) . "</td>";
@@ -113,6 +111,12 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
               ?>
             </tbody>
           </table>
+
+        </div>
+
+        <!-- Mensaje fuera de la tabla -->
+        <div id="mensaje-vacio" class="text-center text-muted py-3" style="display: none;">
+          No se encontraron resultados.
         </div>
 
         <div id="paginacion" class="d-flex justify-content-center"></div>
@@ -122,7 +126,6 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
 </div>
 
 <!-- Modal de Pago -->
-<!-- Modal de Pago Mejorado -->
 <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <form class="modal-content shadow-lg rounded-4" method="POST" action="../php/procesar_pago.php">
@@ -132,7 +135,6 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
       </div>
       <div class="modal-body bg-light">
         <input type="hidden" name="id_resultado" id="modal_id_resultado">
-
         <div class="mb-3">
           <label class="form-label">Paciente</label>
           <input type="text" id="modal_paciente" class="form-control" readonly>
@@ -162,9 +164,6 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
   </div>
 </div>
 
-
-
-
 <!-- Modal Imprimir Resultados -->
 <div class="modal fade" id="modalImprimir" tabindex="-1" aria-labelledby="modalImprimirLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -190,35 +189,77 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
   </div>
 </div>
 
-
 <script>
-  function abrirModalPago(data) {
-    document.getElementById('modal_id_resultado').value = data.id_resultado;
-    document.getElementById('modal_paciente').value = data.paciente_nombre;
-    document.getElementById('modal_prueba').value = data.prueba_nombre;
-    document.getElementById('modal_precio').value = data.precio;
-    document.getElementById('modal_monto').value = '';
+  const registrosPorPagina = 8;
+  let paginaActual = 1;
+  let todasLasFilas = [];
+  let filasFiltradas = [];
 
-    // Eliminar errores anteriores
-    document.getElementById('monto-error').classList.add('d-none');
+  document.addEventListener('DOMContentLoaded', () => {
+    const tbody = document.querySelector('#tabla-datos');
+    todasLasFilas = Array.from(tbody.querySelectorAll('tr'));
+    filasFiltradas = [...todasLasFilas];
 
-    // Mostrar modal
-    const modal = new bootstrap.Modal(document.getElementById('modalPago'));
-    modal.show();
+    mostrarPagina(paginaActual);
+    agregarEventosBusqueda();
+  });
 
-    // Validación al enviar el formulario
-    const form = document.querySelector('#modalPago form');
-    form.onsubmit = function(e) {
-      const precio = parseFloat(document.getElementById('modal_precio').value);
-      const monto = parseFloat(document.getElementById('modal_monto').value);
-      if (precio !== monto) {
-        e.preventDefault();
-        document.getElementById('monto-error').classList.remove('d-none');
+  function mostrarPagina(pagina) {
+    const inicio = (pagina - 1) * registrosPorPagina;
+    const fin = inicio + registrosPorPagina;
+
+    todasLasFilas.forEach(fila => fila.style.display = 'none');
+
+    if (filasFiltradas.length === 0) {
+      document.getElementById('mensaje-vacio').style.display = 'block';
+    } else {
+      document.getElementById('mensaje-vacio').style.display = 'none';
+      filasFiltradas.forEach((fila, i) => {
+        if (i >= inicio && i < fin) fila.style.display = '';
+      });
+    }
+
+    mostrarPaginacion();
+  }
+
+  function mostrarPaginacion() {
+    const totalPaginas = Math.ceil(filasFiltradas.length / registrosPorPagina);
+    const paginacionDiv = document.getElementById('paginacion');
+    paginacionDiv.innerHTML = '';
+
+    if (totalPaginas <= 1) return;
+
+    for (let i = 1; i <= totalPaginas; i++) {
+      const boton = document.createElement('button');
+      boton.className = 'btn btn-outline-primary mx-1';
+      boton.textContent = i;
+      if (i === paginaActual) boton.classList.add('active');
+      boton.addEventListener('click', () => {
+        paginaActual = i;
+        mostrarPagina(i);
+      });
+      paginacionDiv.appendChild(boton);
+    }
+  }
+
+  function agregarEventosBusqueda() {
+    const inputBusqueda = document.getElementById('buscar');
+    inputBusqueda.addEventListener('input', () => {
+      const valor = inputBusqueda.value.toLowerCase();
+
+      if (valor === '') {
+        filasFiltradas = [...todasLasFilas];
+      } else {
+        filasFiltradas = todasLasFilas.filter(fila =>
+          fila.textContent.toLowerCase().includes(valor)
+        );
       }
-    };
+
+      paginaActual = 1;
+      mostrarPagina(paginaActual);
+    });
   }
 </script>
-
 
 <!-- Ocultar alertas automáticamente -->
 <script>
@@ -232,11 +273,9 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
   }, 10000);
 </script>
 
-
 <!-- Enlazar Bootstrap JS y dependencias -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
 </body>
-
 </html>

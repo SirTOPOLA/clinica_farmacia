@@ -112,12 +112,15 @@ $registros_triaje = $stmt_triaje->fetchAll(PDO::FETCH_ASSOC);
                       <a href="eliminar_triaje.php?id=<?= $triaje['id_triaje'] ?>" class="btn btn-danger btn-sm">
                         <span class="material-icons">delete</span> Eliminar
                       </a>
-                      <a href="asig_pruebas.php?id_paciente=<?= $triaje['id_paciente'] ?>&id_triaje=<?= $triaje['id_triaje'] ?>" class="btn btn-success btn-sm">
-                        <span class="material-icons">science</span> Pruebas Médicas
-                      </a>
+                     
                     <?php endif; ?>
 
                     <?php if ($rol_usuario == 'ADMINISTRADOR' || $rol_usuario == 'MEDICO'): ?>
+
+                      <a href="asig_pruebas.php?id_paciente=<?= $triaje['id_paciente'] ?>&id_triaje=<?= $triaje['id_triaje'] ?>" class="btn btn-success btn-sm">
+                        <span class="material-icons">science</span> Pruebas Médicas
+                      </a>
+
                       <button class="btn btn-info btn-sm"
                         data-bs-toggle="modal"
                         data-bs-target="#modalReceta"

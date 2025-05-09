@@ -3,26 +3,37 @@ include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
 
 
+$id_usuario = $_SESSION['id_usuario'];
 
-
+// Obtener el rol
+$sql = "SELECT UPPER(r.nombre_rol) AS roles FROM usuarios u
+        JOIN roles r ON u.id_rol = r.id_rol
+        WHERE u.id_usuario = ?";
+$stmt = $conexion->prepare($sql);
+$stmt->execute([$id_usuario]);
+$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+$rol_usuario = $usuario ? $usuario['roles'] : '';
 
 try {
   $sql = "
-        SELECT c.id_cita,c.recordatorio_enviado, p.nombre AS nombre_paciente, p.apellido AS apellido_paciente,
-               e.nombre AS nombre_medico, e.apellido AS apellido_medico,
-               c.fecha_cita, c.hora_cita, c.estado
-        FROM citas c
-        INNER JOIN pacientes p ON c.id_paciente = p.id_paciente
-        INNER JOIN empleados e ON c.id_empleado = e.id_empleado
-        ORDER BY c.fecha_cita DESC, c.hora_cita DESC
-    ";
+  SELECT c.id_cita, c.recordatorio_enviado, 
+         p.nombre AS nombre_paciente, p.apellido AS apellido_paciente,
+         e.nombre AS nombre_medico, e.apellido AS apellido_medico,
+         c.fecha_cita, c.hora_cita, c.estado
+  FROM citas c
+  INNER JOIN pacientes p ON c.id_paciente = p.id_paciente
+  INNER JOIN empleados e ON c.id_empleado = e.id_empleado
+  WHERE CONCAT(c.fecha_cita, ' ', c.hora_cita) >= NOW()
+  ORDER BY c.fecha_cita ASC, c.hora_cita ASC
+";
   $stmt = $conexion->query($sql);
   $citas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $proxima_cita = $citas[0] ?? null;
+
 } catch (PDOException $e) {
   $_SESSION['error'] = "Error al cargar citas: " . $e->getMessage();
   $citas = [];
 }
-
 ?>
 
 <!-- Main Content -->
@@ -31,28 +42,44 @@ try {
     <div class="card shadow-lg mt-4 border-0">
       <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white rounded-top">
         <h2 class="mb-0"><span class="material-icons">event_note</span> Gestión de Citas</h2>
-        <button class="btn btn-primary text-white shadow-sm rounded-3" onclick="window.location='registrar_cita.php'">
-          <span class="material-icons">add </span>
+        <button class="btn btn-light text-primary shadow-sm rounded-3" onclick="window.location='registrar_cita.php'" title="Registrar nueva cita">
+          <span class="material-icons">add</span>
         </button>
       </div>
 
-      <!-- para las alertas -->
       <div id="alert-container" class="mb-3">
-        <?php include_once("../includes/sidebar.php"); ?>
+        <?php if (isset($_SESSION['error'])): ?>
+          <div class="alert alert-danger"><?= htmlspecialchars($_SESSION['error']) ?></div>
+          <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
       </div>
 
       <div class="card-body bg-light">
         <div class="row mb-3 justify-content-center">
           <div class="col-md-6">
-            <div class="input-group">
-              <input type="text" id="buscar" class="form-control shadow-sm rounded" placeholder="🔍 Buscar por paciente, empleado o estado..."
-                oninput="buscarCitas()">
-            </div>
+            <input type="text" id="buscar" class="form-control shadow-sm rounded" placeholder="🔍 Buscar por paciente, empleado o estado...">
           </div>
         </div>
 
+
+
+        <?php if ($proxima_cita): ?>
+          <div class="alert alert-info d-flex align-items-center justify-content-between shadow-sm rounded">
+            <div>
+              <strong>📅 Próxima cita:</strong>
+              <?= htmlspecialchars($proxima_cita['nombre_paciente'] . ' ' . $proxima_cita['apellido_paciente']) ?>
+              con el Dr. <?= htmlspecialchars($proxima_cita['nombre_medico'] . ' ' . $proxima_cita['apellido_medico']) ?>
+              el <strong><?= htmlspecialchars($proxima_cita['fecha_cita']) ?></strong> a las <strong><?= htmlspecialchars($proxima_cita['hora_cita']) ?></strong>.
+            </div>
+            <span class="material-icons text-primary">notifications_active</span>
+          </div>
+        <?php endif; ?>
+
+
+
+
         <div id="tabla-citas" class="table-responsive">
-          <table class="table table-striped table-hover shadow-sm rounded">
+          <table class="table table-sm table-striped table-hover shadow-sm rounded text-center">
             <thead class="bg-secondary text-white">
               <tr>
                 <th><span class="material-icons">person</span> Paciente</th>
@@ -64,7 +91,7 @@ try {
                 <th><span class="material-icons">settings</span> Acciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="citas-tbody">
               <?php if (!empty($citas)): ?>
                 <?php foreach ($citas as $cita): ?>
                   <tr>
@@ -80,15 +107,21 @@ try {
                                               'cancelada' => 'danger',
                                               default => 'secondary'
                                             } ?>">
-                        <?= ucfirst($cita['estado']) ?>
+                        <?= ucfirst(htmlspecialchars($cita['estado'])) ?>
                       </span>
                     </td>
                     <td>
                       <?= $cita['recordatorio_enviado'] ? '<span class="text-success">✅ Enviado</span>' : '<span class="text-muted">⏳ No</span>' ?>
                     </td>
                     <td>
-                      <a href="editar_cita.php?id=<?= $cita['id_cita'] ?>" class="btn btn-sm btn-primary">Editar</a>
-                      <a href="eliminar_cita.php?id=<?= $cita['id_cita'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta cita?')">Eliminar</a>
+                      <a href="editar_cita.php?id=<?= $cita['id_cita'] ?>" class="btn btn-sm btn-outline-primary" title="Editar cita">
+                        <span class="material-icons">edit</span>
+                      </a>
+                      <?php if ($rol_usuario === 'ADMINISTRADOR'): ?>
+                        <a href="eliminar_cita.php?id=<?= $cita['id_cita'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de eliminar esta cita?')" title="Eliminar cita">
+                          <span class="material-icons">delete</span>
+                        </a>
+                      <?php endif; ?>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -101,12 +134,31 @@ try {
           </table>
         </div>
 
-        <div id="paginacion" class="d-flex justify-content-center"></div>
+        <div id="paginacion" class="d-flex justify-content-center mt-3">
+          <!-- Aquí se puede implementar paginación con JS o PHP -->
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<script>
+  document.getElementById("buscar").addEventListener("input", function() {
+    const texto = this.value.toLowerCase();
+    const filas = document.querySelectorAll("#citas-tbody tr");
+
+    filas.forEach(fila => {
+      const contenido = fila.innerText.toLowerCase();
+      fila.style.display = contenido.includes(texto) ? "" : "none";
+    });
+  });
+</script>
+
+
+
+<!-- Enlazar Bootstrap JS y dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
 </body>
 
