@@ -94,10 +94,11 @@ try {
                                 </label>
                                 <select class="form-select shadow-sm form-select-lg" id="rol" name="rol" required disabled>
                                     <option selected disabled value="">Selecciona un rol</option>
-                                    <option value="1">Administrador</option>
-                                    <option value="5">Enfermera</option>
-                                    <option value="2">Médico</option>
-                                    <option value="3">Recepcion</option>
+                                    <option value="2">Administrador</option>
+                                    <option value="3">Enfermera</option>
+                                    <option value="5">Médico</option>
+                                    <option value="1">Recepcion</option>
+                                    <option value="4">Laboratorio</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     Selecciona un rol válido.

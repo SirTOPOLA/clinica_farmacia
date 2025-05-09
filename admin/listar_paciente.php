@@ -2,9 +2,29 @@
 include_once("../includes/header.php");
 include_once("../includes/sidebar.php");
 
-require_once("../config/conexion.php");
+
 $stmt = $conexion->query("SELECT * FROM pacientes");
 $pacientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['id_usuario'])) {
+  echo "<div class='alert alert-danger'>No estás autenticado. Por favor, inicia sesión.</div>";
+  exit;
+}
+
+$id_usuario = $_SESSION['id_usuario'];
+
+// Obtener el rol del usuario
+$sql = "SELECT r.nombre_rol AS roles FROM usuarios u
+        JOIN roles r ON u.id_rol = r.id_rol
+        WHERE u.id_usuario = ?";
+$stmt = $conexion->prepare($sql);
+$stmt->execute([$id_usuario]);
+$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+$rol_usuario = $usuario ? $usuario['roles'] : '';
 ?>
 
 <!-- Main Content -->
@@ -63,9 +83,14 @@ $pacientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <td><?= htmlspecialchars($paciente['correo']) ?></td>
                   <td><?= htmlspecialchars($paciente['direccion']) ?></td>
                   <td><?= htmlspecialchars($paciente['fecha_registro']) ?></td>
-                  <td>
-                    <button class="btn btn-sm btn-primary">Editar</button>
-                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                  
+
+                    <td>
+  <button class="btn btn-sm btn-primary">Editar</button>
+  <?php if ($rol_usuario !== 'RECEPCION'): ?>
+    <button class="btn btn-sm btn-danger">Eliminar</button>
+  <?php endif; ?>
+</td>
                   </td>
                 </tr>
               <?php endforeach; ?>

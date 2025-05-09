@@ -18,6 +18,26 @@ $stmt = $conexion->prepare($sql);
 $stmt->execute([$id_usuario]);
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 $rol_usuario = $usuario ? $usuario['roles'] : '';
+
+
+
+
+if ($rol_usuario == 'LABORATORIO') {
+  $sql = "SELECT l.*, p.nombre AS paciente_nombre, p.codigo, pr.nombre AS prueba_nombre, pr.precio
+          FROM laboratorio l
+          JOIN pacientes p ON l.id_paciente = p.id_paciente
+          JOIN pruebas_medicas pr ON l.tipo_prueba = pr.id_prueba
+          WHERE l.pagado = 1
+          ORDER BY l.fecha DESC";
+  $stmt = $conexion->query($sql);
+} else {
+  $sql = "SELECT l.*, p.nombre AS paciente_nombre, p.codigo, pr.nombre AS prueba_nombre, pr.precio
+          FROM laboratorio l
+          JOIN pacientes p ON l.id_paciente = p.id_paciente
+          JOIN pruebas_medicas pr ON l.tipo_prueba = pr.id_prueba
+          ORDER BY l.fecha DESC";
+  $stmt = $conexion->query($sql);
+}
 ?>
 
 <div class="main-content">
@@ -25,9 +45,13 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
     <div class="card shadow-lg mt-4 border-0">
       <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white rounded-top">
         <h2 class="mb-0"><span class="material-icons">science</span> Resultados de Laboratorio</h2>
-        <button class="btn btn-primary text-white shadow-sm rounded-3" onclick="window.location='registrar_laboratorio.php'">
-          <span class="material-icons">add</span>
-        </button>
+       <?php if ($rol_usuario != 'LABORATORIO') : ?>
+  <button class="btn btn-primary text-white shadow-sm rounded-3" onclick="window.location='listar_triaje.php'">
+    <span class="material-icons">add</span>
+  </button>
+<?php endif; ?>
+
+     
       </div>
 
       <div class="card-body bg-light">
@@ -77,11 +101,7 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
             </thead>
             <tbody id="tabla-datos">
               <?php
-              $sql = "SELECT l.*, p.nombre AS paciente_nombre, p.codigo, pr.nombre AS prueba_nombre, pr.precio
-                      FROM laboratorio l
-                      JOIN pacientes p ON l.id_paciente = p.id_paciente
-                      JOIN pruebas_medicas pr ON l.tipo_prueba = pr.id_prueba
-                      ORDER BY l.fecha DESC";
+
               $stmt = $conexion->query($sql);
               while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $observaciones = htmlspecialchars(strlen($fila['observaciones']) > 50 ? substr($fila['observaciones'], 0, 50) . '...' : $fila['observaciones']);
@@ -100,12 +120,17 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
                 echo "<td>" . $resultado_span . "</td>";
                 echo "<td>" . $observaciones . "</td>";
                 echo "<td>" . $pagado_span . "</td>";
-                echo "<td>
-                        <a href='editar_laboratorio.php?id=" . $fila['id_resultado'] . "' class='btn btn-sm btn-warning'><i class='material-icons'>edit</i></a>
-                        $eliminar_button
-                        $imprimir_button
-                        $pagar_button
-                      </td>";
+                echo "<td>";
+                if ($rol_usuario == 'LABORATORIO') {
+                  if ($fila['pagado'] == 1) {
+                    if ($fila['resultado'] == 'Resultado pendiente') {
+                      echo "<a href='editar_laboratorio.php?id=" . $fila['id_resultado'] . "' class='btn btn-sm btn-warning'><i class='material-icons'>edit</i></a>";
+                    }
+                    echo "<a href='imprimir_resultado.php?id=" . $fila['id_resultado'] . "' class='btn btn-sm btn-success'><i class='material-icons'>print</i></a>";
+                  }
+                }
+                echo "$eliminar_button $imprimir_button $pagar_button";
+                echo "</td>";
                 echo "</tr>";
               }
               ?>
@@ -278,4 +303,5 @@ $rol_usuario = $usuario ? $usuario['roles'] : '';
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
 </body>
+
 </html>
