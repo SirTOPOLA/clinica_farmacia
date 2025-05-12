@@ -1,6 +1,6 @@
 <?php
 include_once("../includes/header.php");
-include_once("../includes/sidebar.php"); 
+include_once("../includes/sidebar.php");
 
 
 // Cargar empleados activos
@@ -11,10 +11,14 @@ try {
 } catch (PDOException $e) {
     die("Error al cargar empleados: " . $e->getMessage());
 }
+
+// Obtener roles desde la base de datos
+$stmt = $conexion->query("SELECT id_rol, nombre FROM roles");
+$roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="main-content">
-    <?php include_once("../components/alerta.php");?>
+    <?php include_once("../components/alerta.php"); ?>
     <div class="container-fluid mt-5 pt-2">
         <div class="row justify-content-center">
             <div class="card shadow rounded-4 p-4">
@@ -87,23 +91,23 @@ try {
                                 </div>
                             </div>
 
-                            <!-- Selección de Rol -->
                             <div class="mb-4 col-12">
                                 <label for="rol" class="form-label fw-semibold fs-5">
                                     <i class="bi bi-person-badge-fill me-2 text-primary"></i>Rol <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-select shadow-sm form-select-lg" id="rol" name="rol" required disabled>
                                     <option selected disabled value="">Selecciona un rol</option>
-                                    <option value="2">Administrador</option>
-                                    <option value="3">Enfermera</option>
-                                    <option value="5">Médico</option>
-                                    <option value="1">Recepcion</option>
-                                    <option value="4">Laboratorio</option>
+                                    <?php foreach ($roles as $rol): ?>
+                                        <option value="<?= htmlspecialchars($rol['id_rol']) ?>">
+                                            <?= htmlspecialchars($rol['nombre']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">
                                     Selecciona un rol válido.
                                 </div>
                             </div>
+
 
                         </div>
 
@@ -128,44 +132,42 @@ try {
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
- 
+
 <script>
-// Activar campos cuando se selecciona un empleado
-document.getElementById('empleado_id').addEventListener('change', function() {
-    const selectedOption = this.options[this.selectedIndex];
-    const correo = selectedOption.getAttribute('data-correo');
-    const codigo = selectedOption.getAttribute('data-codigo');
+    // Activar campos cuando se selecciona un empleado
+    document.getElementById('empleado_id').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const correo = selectedOption.getAttribute('data-correo');
+        const codigo = selectedOption.getAttribute('data-codigo');
 
-    // Rellenar los campos de correo y código automáticamente
-    document.getElementById('correo').value = correo;
-    document.getElementById('codigo_empleado').value = codigo;
+        // Rellenar los campos de correo y código automáticamente
+        document.getElementById('correo').value = correo;
+        document.getElementById('codigo_empleado').value = codigo;
 
-    // Habilitar los campos de correo y código, que estaban inicialmente deshabilitados
-    document.getElementById('correo').disabled = false;
-    document.getElementById('codigo_empleado').disabled = false;
+        // Habilitar los campos de correo y código, que estaban inicialmente deshabilitados
+        document.getElementById('correo').disabled = false;
+        document.getElementById('codigo_empleado').disabled = false;
 
-    // Habilitar los campos de contraseña y rol
-    document.getElementById('password').disabled = false;
-    document.getElementById('password_repeat').disabled = false;
-    document.getElementById('rol').disabled = false;
-});
+        // Habilitar los campos de contraseña y rol
+        document.getElementById('password').disabled = false;
+        document.getElementById('password_repeat').disabled = false;
+        document.getElementById('rol').disabled = false;
+    });
 
-// Validación Bootstrap
-(() => {
-    'use strict'
-    const forms = document.querySelectorAll('.needs-validation')
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', e => {
-            if (!form.checkValidity()) {
-                e.preventDefault()
-                e.stopPropagation()
-            }
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
- 
- 
+    // Validación Bootstrap
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', e => {
+                if (!form.checkValidity()) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
 </script>
 
 <script src="../assets/js/alerta.js"></script>

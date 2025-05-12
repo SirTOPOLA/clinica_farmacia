@@ -52,16 +52,19 @@ $menu = [
         ['listar_pruebas.php', 'bi bi-file-earmark-medical', 'Pruebas médicas', ['administrador']],
         ['listar_laboratorio.php', 'bi bi-beaker', 'Laboratorio', ['laboratorio', 'medico', 'administrador']],
         ['listar_receta.php', 'bi bi-prescription', 'Recetas', ['medico', 'administrador']],
+        
     ],
     'Farmacia' => [
         ['listar_farmacia.php', 'bi bi-capsule', 'Farmacia', ['recepcion', 'administrador']],
     ],
     'Administración' => [
         ['listar_historial_medico.php', 'bi bi-clock-history', 'Historial', ['administrador']],
+        ['listar_reportes.php', 'bi bi-journal-text', 'Reportes', ['administrador']],
         ['listar_empleado.php', 'bi bi-person-badge', 'Empleados', ['administrador']],
         ['listar_usuario.php', 'bi bi-person-gear', 'Usuarios', ['administrador']],
         ['listar_notificacion.php', 'bi bi-bell', 'Notificaciones', ['administrador']],
         ['configuracion.php', 'bi bi-gear', 'Configuración', ['administrador']],
+        
     ]
 ];
 ?>
